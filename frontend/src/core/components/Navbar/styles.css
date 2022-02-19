@@ -1,0 +1,19 @@
+header {
+    background-color: var(--color-primary);
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.vidas-nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+}
+
+.vidas-nav-content h1 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 24px;
+}

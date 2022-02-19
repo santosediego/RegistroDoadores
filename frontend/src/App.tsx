@@ -1,8 +1,11 @@
+import Navbar from "./core/components/Navbar";
 
 function App() {
   return (
-    <div>
-      <p>
+    <>
+      <Navbar/>
+      <div>
+        <p>
           Cadastro de doadores, projeto Vida por vidas.
         </p>
         <a
@@ -12,7 +15,8 @@ function App() {
         >
           /santosediego
         </a>
-    </div>
+      </div>
+    </>
   );
 }
 
