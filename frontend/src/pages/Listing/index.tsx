@@ -1,8 +1,11 @@
+import Table from "core/components/Table";
 
 function Listing (){
 
     return (
-        <p>Lista</p>
+        <>
+        <Table/>
+        </>
     );
 }
 
