@@ -119,20 +119,20 @@ public class Doador implements Serializable {
 		this.genero = genero;
 	}
 
-	public Integer getEstadoCivil() {
-		return estadoCivil;
+	public EstadoCivil getEstadoCivil() {
+		return EstadoCivil.toEnum(estadoCivil);
 	}
 
-	public void setEstadoCivil(Integer estadoCivil) {
-		this.estadoCivil = estadoCivil;
+	public void setEstadoCivil(EstadoCivil estadoCivil) {
+		this.estadoCivil = estadoCivil.getId();
 	}
 
-	public Integer getGrupoSanquineo() {
-		return grupoSanguineo;
+	public GrupoSanguineo getGrupoSanquineo() {
+		return GrupoSanguineo.toEnum(grupoSanguineo);
 	}
 
-	public void setGrupoSanquineo(Integer grupoSanquineo) {
-		this.grupoSanguineo = grupoSanquineo;
+	public void setGrupoSanquineo(GrupoSanguineo grupoSanquineo) {
+		this.grupoSanguineo = grupoSanquineo.getId();
 	}
 
 	public String getCelular() {
