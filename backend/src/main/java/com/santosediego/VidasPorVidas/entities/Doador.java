@@ -33,7 +33,7 @@ public class Doador implements Serializable {
 	private Instant dataNascimento;
 	private String genero;
 	private Integer estadoCivil;
-	private Integer grupoSanquineo;
+	private Integer grupoSanguineo;
 	private String celular;
 	private String telefone;
 	private Double peso;
@@ -60,7 +60,7 @@ public class Doador implements Serializable {
 		this.dataNascimento = dataNascimento;
 		this.genero = genero;
 		this.estadoCivil = estadoCivil;
-		this.grupoSanquineo = grupoSanquineo;
+		this.grupoSanguineo = grupoSanquineo;
 		this.celular = celular;
 		this.telefone = telefone;
 		this.peso = peso;
@@ -125,11 +125,11 @@ public class Doador implements Serializable {
 	}
 
 	public Integer getGrupoSanquineo() {
-		return grupoSanquineo;
+		return grupoSanguineo;
 	}
 
 	public void setGrupoSanquineo(Integer grupoSanquineo) {
-		this.grupoSanquineo = grupoSanquineo;
+		this.grupoSanguineo = grupoSanquineo;
 	}
 
 	public String getCelular() {
