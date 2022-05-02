@@ -14,6 +14,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.santosediego.VidasPorVidas.entities.enums.EstadoCivil;
+import com.santosediego.VidasPorVidas.entities.enums.GrupoSanguineo;
+
 @Entity
 @Table(name = "tb_doador")
 public class Doador implements Serializable {
@@ -51,7 +54,7 @@ public class Doador implements Serializable {
 	}
 
 	public Doador(Integer id, String nome, String cpf, String rg, Instant dataNascimento, String genero,
-			Integer estadoCivil, Integer grupoSanquineo, String celular, String telefone, Double peso,
+			EstadoCivil estadoCivil, GrupoSanguineo grupoSanguineo, String celular, String telefone, Double peso,
 			Instant dataCadastro, Instant dataAlteracao) {
 		this.id = id;
 		this.nome = nome;
@@ -59,8 +62,8 @@ public class Doador implements Serializable {
 		this.rg = rg;
 		this.dataNascimento = dataNascimento;
 		this.genero = genero;
-		this.estadoCivil = estadoCivil;
-		this.grupoSanguineo = grupoSanquineo;
+		this.estadoCivil = (estadoCivil == null) ? null : estadoCivil.getId();
+		this.grupoSanguineo = (grupoSanguineo == null) ? null : grupoSanguineo.getId();
 		this.celular = celular;
 		this.telefone = telefone;
 		this.peso = peso;
