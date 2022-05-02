@@ -1,8 +1,6 @@
-.container{
-    padding: 15px;
-}
 
-.vidas-ToView{
+
+.vidas-table-ToView{
     transform: scaleX(-1);
 }
 

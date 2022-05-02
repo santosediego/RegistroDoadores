@@ -29,9 +29,9 @@ function Table() {
                         <td>{pessoa.cpf}</td>
                         <td>{pessoa.rg}</td>
                         <td>
-                            <button className="btn vidas-ToView"><ToView /></button>
-                            <button className="btn"><ToEdit /></button>
-                            <button className="btn"><Delete /></button>
+                            <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
+                            <button className="btn"title='Editar'><ToEdit /></button>
+                            <button className="btn" title='Excluir'><Delete /></button>
                         </td>
                     </tr>
                     <tr>
@@ -39,9 +39,9 @@ function Table() {
                         <td>{pessoa.cpf}</td>
                         <td>{pessoa.rg}</td>
                         <td>
-                            <button className="btn vidas-ToView"><ToView /></button>
-                            <button className="btn"><ToEdit /></button>
-                            <button className="btn"><Delete /></button>
+                            <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
+                            <button className="btn"title='Editar'><ToEdit /></button>
+                            <button className="btn" title='Excluir'><Delete /></button>
                         </td>
                     </tr>
                     <tr>
@@ -49,9 +49,9 @@ function Table() {
                         <td>{pessoa.cpf}</td>
                         <td>{pessoa.rg}</td>
                         <td>
-                            <button className="btn vidas-ToView"><ToView /></button>
-                            <button className="btn"><ToEdit /></button>
-                            <button className="btn"><Delete /></button>
+                            <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
+                            <button className="btn"title='Editar'><ToEdit /></button>
+                            <button className="btn" title='Excluir'><Delete /></button>
                         </td>
                     </tr>
                     <tr>
@@ -59,9 +59,9 @@ function Table() {
                         <td>{pessoa.cpf}</td>
                         <td>{pessoa.rg}</td>
                         <td>
-                            <button className="btn vidas-ToView"><ToView /></button>
-                            <button className="btn"><ToEdit /></button>
-                            <button className="btn"><Delete /></button>
+                            <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
+                            <button className="btn"title='Editar'><ToEdit /></button>
+                            <button className="btn" title='Excluir'><Delete /></button>
                         </td>
                     </tr>
                     <tr>
@@ -69,9 +69,9 @@ function Table() {
                         <td>{pessoa.cpf}</td>
                         <td>{pessoa.rg}</td>
                         <td>
-                            <button className="btn vidas-ToView"><ToView /></button>
-                            <button className="btn"><ToEdit /></button>
-                            <button className="btn"><Delete /></button>
+                            <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
+                            <button className="btn"title='Editar'><ToEdit /></button>
+                            <button className="btn" title='Excluir'><Delete /></button>
                         </td>
                     </tr>
                     <tr>
@@ -79,9 +79,9 @@ function Table() {
                         <td>{pessoa.cpf}</td>
                         <td>{pessoa.rg}</td>
                         <td>
-                            <button className="btn vidas-ToView"><ToView /></button>
-                            <button className="btn"><ToEdit /></button>
-                            <button className="btn"><Delete /></button>
+                            <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
+                            <button className="btn"title='Editar'><ToEdit /></button>
+                            <button className="btn" title='Excluir'><Delete /></button>
                         </td>
                     </tr>
                     <tr>
@@ -89,9 +89,9 @@ function Table() {
                         <td>{pessoa.cpf}</td>
                         <td>{pessoa.rg}</td>
                         <td>
-                            <button className="btn vidas-ToView"><ToView /></button>
-                            <button className="btn"><ToEdit /></button>
-                            <button className="btn"><Delete /></button>
+                            <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
+                            <button className="btn"title='Editar'><ToEdit /></button>
+                            <button className="btn" title='Excluir'><Delete /></button>
                         </td>
                     </tr>
                     <tr>
@@ -99,9 +99,9 @@ function Table() {
                         <td>{pessoa.cpf}</td>
                         <td>{pessoa.rg}</td>
                         <td>
-                            <button className="btn vidas-ToView"><ToView /></button>
-                            <button className="btn"><ToEdit /></button>
-                            <button className="btn"><Delete /></button>
+                            <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
+                            <button className="btn"title='Editar'><ToEdit /></button>
+                            <button className="btn" title='Excluir'><Delete /></button>
                         </td>
                     </tr>
                     <tr>
@@ -109,9 +109,9 @@ function Table() {
                         <td>{pessoa.cpf}</td>
                         <td>{pessoa.rg}</td>
                         <td>
-                            <button className="btn vidas-ToView"><ToView /></button>
-                            <button className="btn"><ToEdit /></button>
-                            <button className="btn"><Delete /></button>
+                            <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
+                            <button className="btn"title='Editar'><ToEdit /></button>
+                            <button className="btn" title='Excluir'><Delete /></button>
                         </td>
                     </tr>
                     <tr>
@@ -119,9 +119,9 @@ function Table() {
                         <td>{pessoa.cpf}</td>
                         <td>{pessoa.rg}</td>
                         <td>
-                            <button className="btn vidas-ToView"><ToView /></button>
-                            <button className="btn"><ToEdit /></button>
-                            <button className="btn"><Delete /></button>
+                            <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
+                            <button className="btn"title='Editar'><ToEdit /></button>
+                            <button className="btn" title='Excluir'><Delete /></button>
                         </td>
                     </tr>
                 </tbody>
