@@ -4,12 +4,13 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_endereco")
@@ -19,7 +20,7 @@ public class Endereco implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 	private String logradouro;
 	private String numero;
 	private String complemento;
@@ -28,13 +29,14 @@ public class Endereco implements Serializable {
 	private String localidade;
 	private String estado;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@OneToOne
+	@JsonIgnore
 	private Doador doador;
 
 	public Endereco() {
 	}
 
-	public Endereco(Integer id, String logradouro, String numero, String complemento, String bairro, String cep,
+	public Endereco(Long id, String logradouro, String numero, String complemento, String bairro, String cep,
 			String localidade, String estado) {
 		this.id = id;
 		this.logradouro = logradouro;
@@ -46,11 +48,11 @@ public class Endereco implements Serializable {
 		this.estado = estado;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

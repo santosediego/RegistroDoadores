@@ -2,16 +2,14 @@ package com.santosediego.VidasPorVidas.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.santosediego.VidasPorVidas.entities.enums.EstadoCivil;
@@ -25,7 +23,7 @@ public class Doador implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 	private String nome;
 
 	@Column(unique = true)
@@ -47,13 +45,13 @@ public class Doador implements Serializable {
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant dataAlteracao;
 	
-	@OneToMany(mappedBy = "doador")
-	private Set<Endereco> enderecos = new HashSet<>();
+	@OneToOne(mappedBy = "doador")
+	private Endereco endereco;
 
 	public Doador() {
 	}
 
-	public Doador(Integer id, String nome, String cpf, String rg, Instant dataNascimento, String genero,
+	public Doador(Long id, String nome, String cpf, String rg, Instant dataNascimento, String genero,
 			EstadoCivil estadoCivil, GrupoSanguineo grupoSanguineo, String celular, String telefone, Double peso,
 			Instant dataCadastro, Instant dataAlteracao) {
 		this.id = id;
@@ -71,11 +69,11 @@ public class Doador implements Serializable {
 		this.dataAlteracao = dataAlteracao;
 	}
 	
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -175,12 +173,12 @@ public class Doador implements Serializable {
 		this.dataAlteracao = dataAlteracao;
 	}
 
-	public Set<Endereco> getEnderecos() {
-		return enderecos;
+	public Endereco getEndereco() {
+		return endereco;
 	}
 
-	public void setEnderecos(Set<Endereco> enderecos) {
-		this.enderecos = enderecos;
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
 	}
 
 	@Override
