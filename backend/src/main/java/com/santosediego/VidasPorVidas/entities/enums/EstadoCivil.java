@@ -2,25 +2,25 @@ package com.santosediego.VidasPorVidas.entities.enums;
 
 public enum EstadoCivil {
 	
-	SOLTEIRO(1, "Solteiro"),
-	CASADO(2, "Casado"),
-	SEPARADO(3, "Separado"),
-	DIVORCIADO(4, "Divorciado"),
-	VIUVO(5, "Viúvo");
+	SOLTEIRO("SOL", "Solteiro"),
+	CASADO("CAS", "Casado"),
+	SEPARADO("SEP", "Separado"),
+	DIVORCIADO("DIV", "Divorciado"),
+	VIUVO("VIU", "Viúvo");
 
-	private int id;
+	private String id;
 	private String descrição;
 
-	private EstadoCivil(int id, String descrição) {
+	private EstadoCivil(String id, String descrição) {
 		this.id = id;
 		this.descrição = descrição;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -32,7 +32,7 @@ public enum EstadoCivil {
 		this.descrição = descrição;
 	}
 
-	public static EstadoCivil toEnum (Integer cod) {
+	public static EstadoCivil toEnum (String cod) {
 		if(cod == null) {
 			return null;
 		}

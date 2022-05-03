@@ -2,30 +2,30 @@ package com.santosediego.VidasPorVidas.entities.enums;
 
 public enum GrupoSanguineo {
 
-	A_POSITIVO(1, "A+"),
-	B_POSITIVO(2, "B+"),
-	AB_POSITIVO(3, "AB+"),
-	O_POSITIVO(4, "O+"),
-	A_NEGATIVO(5, "A-"),
-	B_NEGATIVO(6, "B-"),
-	AB_NEGATIVO(7, "AB-"),
-	O_NEGATIVO(8, "O-"),
-	FALSO_O_NEGATIVO(9, "Falso O-"),
-	SANGUE_DOURADO(10, "Sangue dourado");
+	A_POSITIVO("A+", "A+"),
+	B_POSITIVO("B+", "B+"),
+	AB_POSITIVO("AB+", "AB+"),
+	O_POSITIVO("O+", "O+"),
+	A_NEGATIVO("A-", "A-"),
+	B_NEGATIVO("B-", "B-"),
+	AB_NEGATIVO("AB-", "AB-"),
+	O_NEGATIVO("O-", "O-"),
+	FALSO_O_NEGATIVO("FO-", "Falso O-"),
+	SANGUE_DOURADO("SD", "Sangue dourado");
 	
-	private int id;
+	private String id;
 	private String descricao;
 
-	private GrupoSanguineo(int id, String descricao) {
+	private GrupoSanguineo(String id, String descricao) {
 		this.id = id;
 		this.descricao = descricao;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -37,7 +37,7 @@ public enum GrupoSanguineo {
 		this.descricao = descricao;
 	}
 
-	public static GrupoSanguineo toEnum (Integer cod) {
+	public static GrupoSanguineo toEnum (String cod) {
 		if(cod == null) {
 			return null;
 		}

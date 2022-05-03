@@ -21,8 +21,8 @@ public class DoadorDTO implements Serializable{
 	private String rg;
 	private Instant dataNascimento;
 	private String genero;
-	private Integer estadoCivil;
-	private Integer grupoSanguineo;
+	private String estadoCivil;
+	private String grupoSanguineo;
 	private String celular;
 	private String telefone;
 	private Double peso;
@@ -38,7 +38,7 @@ public class DoadorDTO implements Serializable{
 	}
 
 	public DoadorDTO(Long id, String nome, String cpf, String rg, Instant dataNascimento, String genero,
-			Integer estadoCivil, Integer grupoSanguineo, String celular, String telefone, Double peso,
+			String estadoCivil, String grupoSanguineo, String celular, String telefone, Double peso,
 			String logradouro, String numero, String complemento, String bairro, String cep, String localidade,
 			String estado) {
 		this.id = id;
@@ -69,7 +69,7 @@ public class DoadorDTO implements Serializable{
 		dataNascimento = doador.getDataNascimento();
 		genero = doador.getGenero();
 		estadoCivil = doador.getEstadoCivil().getId();
-		grupoSanguineo = doador.getEstadoCivil().getId();
+		grupoSanguineo = doador.getGrupoSanquineo().getId();
 		celular = doador.getCelular();
 		telefone = doador.getTelefone();
 		peso = doador.getPeso();
@@ -130,19 +130,19 @@ public class DoadorDTO implements Serializable{
 		this.genero = genero;
 	}
 
-	public Integer getEstadoCivil() {
+	public String getEstadoCivil() {
 		return estadoCivil;
 	}
 
-	public void setEstadoCivil(Integer estadoCivil) {
+	public void setEstadoCivil(String estadoCivil) {
 		this.estadoCivil = estadoCivil;
 	}
 
-	public Integer getGrupoSanguineo() {
+	public String getGrupoSanguineo() {
 		return grupoSanguineo;
 	}
 
-	public void setGrupoSanguineo(Integer grupoSanguineo) {
+	public void setGrupoSanguineo(String grupoSanguineo) {
 		this.grupoSanguineo = grupoSanguineo;
 	}
 

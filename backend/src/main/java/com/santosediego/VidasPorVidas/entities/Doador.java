@@ -33,8 +33,8 @@ public class Doador implements Serializable {
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant dataNascimento;
 	private String genero;
-	private Integer estadoCivil;
-	private Integer grupoSanguineo;
+	private String estadoCivil;
+	private String grupoSanguineo;
 	private String celular;
 	private String telefone;
 	private Double peso;
