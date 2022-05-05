@@ -45,7 +45,8 @@ public class DoadorService {
 
 	@Transactional(readOnly = true)
 	public DoadorDTO findById(Long id) {
-		Doador doador = doadorRepository.findById(id).get();
+		Optional<Doador> obj = doadorRepository.findById(id);
+		Doador doador = obj.orElseThrow(() -> new ResourceNotFoundException("Entidade não encontrada"));
 
 		return new DoadorDTO(doador);
 	}
