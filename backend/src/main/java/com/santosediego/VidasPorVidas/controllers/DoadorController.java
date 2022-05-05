@@ -1,6 +1,7 @@
 package com.santosediego.VidasPorVidas.controllers;
 
 import java.net.URI;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.santosediego.VidasPorVidas.dto.DoadorDTO;
+import com.santosediego.VidasPorVidas.dto.DoadorExportDTO;
 import com.santosediego.VidasPorVidas.services.DoadorService;
 
 @RestController
@@ -38,6 +40,12 @@ public class DoadorController {
 		return service.findById(id);
 	}
 
+	@GetMapping(value = "/export")
+	public ResponseEntity<List<DoadorExportDTO>> exportAll() {
+		List<DoadorExportDTO> listDTO = service.exportAll();
+		return ResponseEntity.ok().body(listDTO);
+	}
+
 	@PostMapping
 	public ResponseEntity<DoadorDTO> insert(@Valid @RequestBody DoadorDTO dto) {
 		dto = service.insert(dto);
@@ -53,7 +61,7 @@ public class DoadorController {
 	}
 
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<DoadorDTO> delete(@PathVariable Long id){
+	public ResponseEntity<DoadorDTO> delete(@PathVariable Long id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}

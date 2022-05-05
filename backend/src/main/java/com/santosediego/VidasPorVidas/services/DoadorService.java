@@ -1,7 +1,9 @@
 package com.santosediego.VidasPorVidas.services;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.santosediego.VidasPorVidas.dto.DoadorDTO;
+import com.santosediego.VidasPorVidas.dto.DoadorExportDTO;
 import com.santosediego.VidasPorVidas.entities.Doador;
 import com.santosediego.VidasPorVidas.entities.Endereco;
 import com.santosediego.VidasPorVidas.entities.enums.EstadoCivil;
@@ -43,6 +46,13 @@ public class DoadorService {
 		Doador doador = doadorRepository.findById(id).get();
 
 		return new DoadorDTO(doador);
+	}
+
+	@Transactional(readOnly = true)
+	public List<DoadorExportDTO> exportAll() {
+		List<Doador> doador = doadorRepository.findAll();
+		List<DoadorExportDTO> listDTO = doador.stream().map(x -> new DoadorExportDTO(x)).collect(Collectors.toList());
+		return listDTO;
 	}
 
 	@Transactional
@@ -133,11 +143,10 @@ public class DoadorService {
 			Doador doador = obj.orElseThrow(() -> new OpenApiResourceNotFoundException("Entity not found"));
 			enderecoRepository.deleteById(doador.getEndereco().getId());
 			doadorRepository.deleteById(id);
-		}catch (EmptyResultDataAccessException e) {
+		} catch (EmptyResultDataAccessException e) {
 			throw new OpenApiResourceNotFoundException("I not found " + id);
 		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityViolationException("Integrity violation");
 		}
 	}
-
 }
