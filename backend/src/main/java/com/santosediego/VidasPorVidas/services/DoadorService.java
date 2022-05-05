@@ -24,6 +24,8 @@ import com.santosediego.VidasPorVidas.entities.enums.EstadoCivil;
 import com.santosediego.VidasPorVidas.entities.enums.GrupoSanguineo;
 import com.santosediego.VidasPorVidas.repositories.DoadorRepository;
 import com.santosediego.VidasPorVidas.repositories.EnderecoRepository;
+import com.santosediego.VidasPorVidas.services.exceptions.DatabaseException;
+import com.santosediego.VidasPorVidas.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class DoadorService {
@@ -92,7 +94,7 @@ public class DoadorService {
 
 			return new DoadorDTO(doador);
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityViolationException("Id exists");
+			throw new ResourceNotFoundException("Violação de integridade");
 		}
 	}
 
@@ -129,14 +131,13 @@ public class DoadorService {
 
 			return new DoadorDTO(doador);
 
-		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityViolationException("Integrity violation");
 		} catch (EntityNotFoundException e) {
-			throw new EntityNotFoundException("Id not found " + id);
+			throw new ResourceNotFoundException("Id não encontrado " + id);
+		} catch (DataIntegrityViolationException e) {
+			throw new ResourceNotFoundException("Violação de integridade");
 		}
 	}
 
-	@Transactional
 	public void delete(Long id) {
 		try {
 			Optional<Doador> obj = doadorRepository.findById(id);
@@ -144,9 +145,9 @@ public class DoadorService {
 			enderecoRepository.deleteById(doador.getEndereco().getId());
 			doadorRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException e) {
-			throw new OpenApiResourceNotFoundException("I not found " + id);
+			throw new ResourceNotFoundException("Id não encontrado " + id);
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityViolationException("Integrity violation");
+			throw new DatabaseException("Violação de integridade");
 		}
 	}
 }
