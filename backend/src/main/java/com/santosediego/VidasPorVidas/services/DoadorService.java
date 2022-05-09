@@ -24,6 +24,7 @@ import com.santosediego.VidasPorVidas.entities.enums.EstadoCivil;
 import com.santosediego.VidasPorVidas.entities.enums.GrupoSanguineo;
 import com.santosediego.VidasPorVidas.repositories.DoadorRepository;
 import com.santosediego.VidasPorVidas.repositories.EnderecoRepository;
+import com.santosediego.VidasPorVidas.services.exceptions.DataIntegrityException;
 import com.santosediego.VidasPorVidas.services.exceptions.DatabaseException;
 import com.santosediego.VidasPorVidas.services.exceptions.ResourceNotFoundException;
 
@@ -61,41 +62,26 @@ public class DoadorService {
 	@Transactional
 	public DoadorDTO insert(DoadorDTO dto) {
 		try {
+
 			Doador doador = new Doador();
 			Endereco endereco = new Endereco();
 
 			doador.setId(null);
 			endereco.setId(null);
 
-			doador.setNome(dto.getNome());
-			doador.setCpf(dto.getCpf());
-			doador.setRg(dto.getRg());
-			doador.setDataNascimento(dto.getDataNascimento());
-			doador.setGenero(dto.getGenero());
-			doador.setEstadoCivil(EstadoCivil.toEnum(dto.getEstadoCivil()));
-			doador.setGrupoSanquineo(GrupoSanguineo.toEnum(dto.getGrupoSanguineo()));
-			doador.setCelular(dto.getCelular());
-			doador.setTelefone(dto.getTelefone());
-			doador.setPeso(dto.getPeso());
-			doador.setDataCadastro(Instant.now());
+			copyDtoToEntity(dto, doador, endereco);
 
-			endereco.setLogradouro(dto.getLogradouro());
-			endereco.setNumero(dto.getNumero());
-			endereco.setComplemento(dto.getComplemento());
-			endereco.setBairro(dto.getBairro());
-			endereco.setCep(dto.getCep());
-			endereco.setLocalidade(dto.getLocalidade());
-			endereco.setEstado(dto.getEstado());
 			doador.setEndereco(endereco);
 
 			doador = doadorRepository.save(doador);
 
 			endereco.setDoador(doador);
+
 			endereco = enderecoRepository.save(endereco);
 
 			return new DoadorDTO(doador);
 		} catch (DataIntegrityViolationException e) {
-			throw new ResourceNotFoundException("Violação de integridade");
+			throw new DataIntegrityException("Violação de integridade, CPF já cadastrado");
 		}
 	}
 
@@ -104,38 +90,21 @@ public class DoadorService {
 
 		try {
 
-			Doador doador = doadorRepository.getById(id);
-			Endereco endereco = enderecoRepository.getById(doador.getEndereco().getId());
+			Optional<Doador> obj = doadorRepository.findById(id);
+			Doador doador = obj.orElseThrow(() -> new ResourceNotFoundException("Entidade não encontrada"));
+			Endereco endereco = doador.getEndereco();
 
-			doador.setNome(dto.getNome());
-			doador.setCpf(dto.getCpf());
-			doador.setRg(dto.getRg());
-			doador.setDataNascimento(dto.getDataNascimento());
-			doador.setGenero(dto.getGenero());
-			doador.setEstadoCivil(EstadoCivil.toEnum(dto.getEstadoCivil()));
-			doador.setGrupoSanquineo(GrupoSanguineo.toEnum(dto.getGrupoSanguineo()));
-			doador.setCelular(dto.getCelular());
-			doador.setTelefone(dto.getTelefone());
-			doador.setPeso(dto.getPeso());
-			doador.setDataAlteracao(Instant.now());
+			copyDtoToEntity(dto, doador, endereco);
 
-			endereco.setLogradouro(dto.getLogradouro());
-			endereco.setNumero(dto.getNumero());
-			endereco.setComplemento(dto.getComplemento());
-			endereco.setBairro(dto.getBairro());
-			endereco.setCep(dto.getCep());
-			endereco.setLocalidade(dto.getLocalidade());
-			endereco.setEstado(dto.getEstado());
-
-			doador = doadorRepository.save(doador);
-			endereco = enderecoRepository.save(endereco);
+			doador = doadorRepository.saveAndFlush(doador);
+			endereco = enderecoRepository.saveAndFlush(endereco);
 
 			return new DoadorDTO(doador);
 
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException("Id não encontrado " + id);
 		} catch (DataIntegrityViolationException e) {
-			throw new ResourceNotFoundException("Violação de integridade");
+			throw new DataIntegrityException("Violação de integridade, CPF já cadastrado");
 		}
 	}
 
@@ -150,5 +119,33 @@ public class DoadorService {
 		} catch (DataIntegrityViolationException e) {
 			throw new DatabaseException("Violação de integridade");
 		}
+	}
+
+	private void copyDtoToEntity(DoadorDTO dto, Doador doador, Endereco endereco) {
+
+		doador.setNome(dto.getNome());
+		doador.setCpf(dto.getCpf());
+		doador.setRg(dto.getRg());
+		doador.setDataNascimento(dto.getDataNascimento());
+		doador.setGenero(dto.getGenero());
+		doador.setEstadoCivil(EstadoCivil.toEnum(dto.getEstadoCivil()));
+		doador.setGrupoSanquineo(GrupoSanguineo.toEnum(dto.getGrupoSanguineo()));
+		doador.setCelular(dto.getCelular());
+		doador.setTelefone(dto.getTelefone());
+		doador.setPeso(dto.getPeso());
+
+		if (doador.getId() == null) {
+			doador.setDataCadastro(Instant.now());
+		} else {
+			doador.setDataAlteracao(Instant.now());
+		}
+
+		endereco.setLogradouro(dto.getLogradouro());
+		endereco.setNumero(dto.getNumero());
+		endereco.setComplemento(dto.getComplemento());
+		endereco.setBairro(dto.getBairro());
+		endereco.setCep(dto.getCep());
+		endereco.setLocalidade(dto.getLocalidade());
+		endereco.setEstado(dto.getEstado());
 	}
 }
