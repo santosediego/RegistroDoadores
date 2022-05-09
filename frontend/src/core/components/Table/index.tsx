@@ -1,16 +1,14 @@
 import { ReactComponent as ToView } from 'core/assets/img/toView.svg';
 import { ReactComponent as ToEdit } from 'core/assets/img/toEdit.svg';
 import { ReactComponent as Delete } from 'core/assets/img/delete.svg';
+import { DoadorResponse } from 'core/types/Doador';
 import './styles.css';
 
-function Table() {
+type Props = {
+    doadores?: DoadorResponse;
+}
 
-    const pessoa = {
-        id: 1,
-        nome: 'Joãozinho Krueger',
-        cpf: '495.683.636-88',
-        rg: '28.953.807'
-    }
+function Table({ doadores }: Props) {
 
     return (
         <div className="container">
@@ -24,106 +22,18 @@ function Table() {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>{pessoa.nome}</td>
-                        <td>{pessoa.cpf}</td>
-                        <td>{pessoa.rg}</td>
-                        <td>
-                            <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
-                            <button className="btn"title='Editar'><ToEdit /></button>
-                            <button className="btn" title='Excluir'><Delete /></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>{pessoa.nome}</td>
-                        <td>{pessoa.cpf}</td>
-                        <td>{pessoa.rg}</td>
-                        <td>
-                            <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
-                            <button className="btn"title='Editar'><ToEdit /></button>
-                            <button className="btn" title='Excluir'><Delete /></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>{pessoa.nome}</td>
-                        <td>{pessoa.cpf}</td>
-                        <td>{pessoa.rg}</td>
-                        <td>
-                            <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
-                            <button className="btn"title='Editar'><ToEdit /></button>
-                            <button className="btn" title='Excluir'><Delete /></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>{pessoa.nome}</td>
-                        <td>{pessoa.cpf}</td>
-                        <td>{pessoa.rg}</td>
-                        <td>
-                            <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
-                            <button className="btn"title='Editar'><ToEdit /></button>
-                            <button className="btn" title='Excluir'><Delete /></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>{pessoa.nome}</td>
-                        <td>{pessoa.cpf}</td>
-                        <td>{pessoa.rg}</td>
-                        <td>
-                            <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
-                            <button className="btn"title='Editar'><ToEdit /></button>
-                            <button className="btn" title='Excluir'><Delete /></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>{pessoa.nome}</td>
-                        <td>{pessoa.cpf}</td>
-                        <td>{pessoa.rg}</td>
-                        <td>
-                            <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
-                            <button className="btn"title='Editar'><ToEdit /></button>
-                            <button className="btn" title='Excluir'><Delete /></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>{pessoa.nome}</td>
-                        <td>{pessoa.cpf}</td>
-                        <td>{pessoa.rg}</td>
-                        <td>
-                            <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
-                            <button className="btn"title='Editar'><ToEdit /></button>
-                            <button className="btn" title='Excluir'><Delete /></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>{pessoa.nome}</td>
-                        <td>{pessoa.cpf}</td>
-                        <td>{pessoa.rg}</td>
-                        <td>
-                            <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
-                            <button className="btn"title='Editar'><ToEdit /></button>
-                            <button className="btn" title='Excluir'><Delete /></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>{pessoa.nome}</td>
-                        <td>{pessoa.cpf}</td>
-                        <td>{pessoa.rg}</td>
-                        <td>
-                            <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
-                            <button className="btn"title='Editar'><ToEdit /></button>
-                            <button className="btn" title='Excluir'><Delete /></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>{pessoa.nome}</td>
-                        <td>{pessoa.cpf}</td>
-                        <td>{pessoa.rg}</td>
-                        <td>
-                            <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
-                            <button className="btn"title='Editar'><ToEdit /></button>
-                            <button className="btn" title='Excluir'><Delete /></button>
-                        </td>
-                    </tr>
+                    {doadores?.content.map(doador => (
+                        <tr key={doador.id}>
+                            <td>{doador.nome}</td>
+                            <td>{doador.cpf}</td>
+                            <td>{doador.rg}</td>
+                            <td>
+                                <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
+                                <button className="btn" title='Editar'><ToEdit /></button>
+                                <button className="btn" title='Excluir'><Delete /></button>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </div>
