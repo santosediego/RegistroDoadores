@@ -61,6 +61,7 @@ public class DoadorService {
 
 	@Transactional
 	public DoadorDTO insert(DoadorDTO dto) {
+
 		try {
 
 			Doador doador = new Doador();
@@ -81,7 +82,7 @@ public class DoadorService {
 
 			return new DoadorDTO(doador);
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Violação de integridade, CPF já cadastrado");
+			throw new DataIntegrityException("Violação de integridade", e);
 		}
 	}
 
@@ -104,7 +105,7 @@ public class DoadorService {
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException("Id não encontrado " + id);
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Violação de integridade, CPF já cadastrado");
+			throw new DataIntegrityException("Violação de integridade", e);
 		}
 	}
 

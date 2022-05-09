@@ -26,7 +26,7 @@ public class Doador implements Serializable {
 	private Long id;
 	private String nome;
 
-	@Column(unique = true)
+	@Column(unique = true, nullable = false)
 	private String cpf;
 	private String rg;
 

@@ -3,7 +3,7 @@ package com.santosediego.VidasPorVidas.dto;
 import java.io.Serializable;
 import java.time.Instant;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.santosediego.VidasPorVidas.entities.Doador;
@@ -14,9 +14,12 @@ public class DoadorDTO implements Serializable{
 
 	private Long id;
 
-	@NotEmpty(message = "Preenchimento obrigatório!")
-	@Size(min = 3, max = 120, message = "O tamanho deve ser entre 5 e 120 caracteres.")
+	@NotBlank(message = "Preenchimento obrigatório!")
+	@Size(min = 3, max = 120, message = "O tamanho deve ser entre 3 e 120 caracteres.")
 	private String nome;
+
+	@NotBlank(message = "Preenchimento obrigatório!")
+	@Size(min = 14, max = 14, message = "O CPF deve conter números e pontos")
 	private String cpf;
 	private String rg;
 	private Instant dataNascimento;

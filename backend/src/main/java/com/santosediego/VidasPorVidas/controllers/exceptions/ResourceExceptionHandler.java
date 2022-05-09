@@ -46,7 +46,7 @@ public class ResourceExceptionHandler implements Serializable {
 	}
 	
 	@ExceptionHandler(DataIntegrityException.class)
-	public ResponseEntity<StandardError> database(DataIntegrityException e, HttpServletRequest request) {
+	public ResponseEntity<StandardError> dataIntegrity(DataIntegrityException e, HttpServletRequest request) {
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		StandardError err = new StandardError();
 		err.setTimestamp(Instant.now());
