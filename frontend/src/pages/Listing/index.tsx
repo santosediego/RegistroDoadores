@@ -1,4 +1,5 @@
 import axios from "axios";
+import Pagination from "core/components/Pagination";
 import Search from "core/components/Search";
 import Table from "core/components/Table";
 import { DoadorResponse } from "core/types/Doador";
@@ -8,7 +9,8 @@ import { useEffect, useState } from "react";
 function Listing() {
 
     const [pageNumber, setPageNumber] = useState(0);
-    const [page, setPage] = useState<DoadorResponse>({
+    
+    const [page, setpage] = useState<DoadorResponse>({
         content: [],
         last: true,
         totalPages: 0,
@@ -20,21 +22,23 @@ function Listing() {
         empty: true
     });
 
+    const handlePageChange = (newPageNumber : number) => {
+        setPageNumber(newPageNumber);
+    }
+
     useEffect(() => {
-        axios.get(`${BASE_URL}/doadores?size=10`)
+        axios.get(`${BASE_URL}/doadores?size=10&page=${pageNumber}`)
             .then(response => {
                 const data = response.data as DoadorResponse;
-                console.log(data);
-                setPageNumber(data.number)
-                setPage(data);
+                setpage(data);
             });
-    }, []);
+    }, [pageNumber]);
 
     return (
         <>
-            <p>{pageNumber + 1}</p>
             <Search />
-            <Table doadores={page} />
+            <Table doadores={page.content} />
+            <Pagination page={page} onChange={handlePageChange} />
         </>
     );
 }

@@ -1,11 +1,11 @@
 import { ReactComponent as ToView } from 'core/assets/img/toView.svg';
 import { ReactComponent as ToEdit } from 'core/assets/img/toEdit.svg';
 import { ReactComponent as Delete } from 'core/assets/img/delete.svg';
-import { DoadorResponse } from 'core/types/Doador';
+import { Doador } from 'core/types/Doador';
 import './styles.css';
 
 type Props = {
-    doadores?: DoadorResponse;
+    doadores?: Doador[];
 }
 
 function Table({ doadores }: Props) {
@@ -22,7 +22,7 @@ function Table({ doadores }: Props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {doadores?.content.map(doador => (
+                    {doadores?.map(doador => (
                         <tr key={doador.id}>
                             <td>{doador.nome}</td>
                             <td>{doador.cpf}</td>
