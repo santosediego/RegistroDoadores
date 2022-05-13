@@ -1,8 +1,14 @@
 import { ReactComponent as ToView } from 'core/assets/img/toView.svg';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './styles.css'
 
 function Search() {
+
+    const navigate = useNavigate();
+
+    const handleCreate = () => {
+        navigate(`/form/edit/create`);
+    }
 
     return (
         <>
@@ -15,9 +21,7 @@ function Search() {
                                 <ToView />
                             </button>
                         </div>
-                        <Link to="/form/create" className='col'>
-                            <button className='btn btn-menu'> Cadastrar</button>
-                        </Link>
+                        <button className='btn btn-menu' onClick={handleCreate}> Cadastrar</button>
                         <div className='col-md-2'>
                             <button className='btn btn-menu'>Gerar lista</button>
                         </div>

@@ -12,9 +12,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Listing />} />
         <Route path="/print" element={<Print />} />
-        <Route path="/form">
-          <Route path=":id" element={<Form />} />
-        </Route>
+        <Route path="/form/:doadorId" element={<Form />} />
+        <Route path="/form/:state/:doadorId" element={<Form />} />
       </Routes>
     </BrowserRouter>
   );

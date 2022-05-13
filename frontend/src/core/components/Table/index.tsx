@@ -3,6 +3,7 @@ import { ReactComponent as ToEdit } from 'core/assets/img/toEdit.svg';
 import { ReactComponent as Delete } from 'core/assets/img/delete.svg';
 import { Doador } from 'core/types/Doador';
 import './styles.css';
+import { Link } from 'react-router-dom';
 
 type Props = {
     doadores?: Doador[];
@@ -28,8 +29,12 @@ function Table({ doadores }: Props) {
                             <td>{doador.cpf}</td>
                             <td>{doador.rg}</td>
                             <td>
-                                <button className="btn vidas-table-ToView" title='Visualizar'><ToView /></button>
-                                <button className="btn" title='Editar'><ToEdit /></button>
+                                <Link to={`form/view/${doador.id}`} type="button" title='Visualizar' className="btn vidas-table-ToView" >
+                                    <ToView />
+                                </Link>
+                                <Link to={`form/edit/${doador.id}`} type="button" title='Editar' className="btn vidas-table-ToView" >
+                                    <ToEdit />
+                                </Link>
                                 <button className="btn" title='Excluir'><Delete /></button>
                             </td>
                         </tr>

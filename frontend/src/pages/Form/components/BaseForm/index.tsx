@@ -5,9 +5,10 @@ import './styles.css';
 type Props = {
     title: string;
     children: React.ReactNode;
+    isView: boolean;
 }
 
-const BaseForm = ({ title, children }: Props) => {
+const BaseForm = ({ title, children, isView }: Props) => {
 
     return (
         <div className="vida-base-form card-base">
@@ -16,14 +17,14 @@ const BaseForm = ({ title, children }: Props) => {
             </h1>
             {children}
             <div className="base-form-actions">
-                <Link to={"/"}>
-                    <button className="btn btn-outline-danger">
-                        CANCELAR
-                    </button>
+                <Link to={"/"} className="btn btn-outline-danger" type='button'>
+                    CANCELAR
                 </Link>
-                <button className="btn btn-primary btn-salvar">
-                    SALVAR
-                </button>
+                {!isView ? (
+                    <button className="btn btn-primary btn-salvar">
+                        SALVAR
+                    </button>
+                ) : null}
             </div>
         </div>
     );
