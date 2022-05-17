@@ -1,11 +1,11 @@
 import { cepRequest, makeRequest } from "core/utils/request";
 import { messageError, messageSuccess, messageWarning } from "core/utils/toastMessages";
-import dayjs from "dayjs";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import BaseForm from "./components/BaseForm";
+import dayjs from "dayjs";
 
 type FormState = {
     id: number;
@@ -37,14 +37,14 @@ function Form() {
 
     const navigate = useNavigate();
     const { doadorId, state } = useParams<ParamsType>();
-    const { register, setValue, handleSubmit } = useForm<FormState>();
+    const { register, setValue, handleSubmit, formState: { errors } } = useForm<FormState>();
     const isView = state === 'view';
     const isEditing = doadorId !== "create"; // o isEditing é diferente de create?
     const formTitle = isView ? 'Visualiar doador' : isEditing ? 'Editar doador' : 'Cadastrar doador';
 
     useEffect(() => {
         if (isEditing) {
-            makeRequest({url:`/doadores/${doadorId}`})
+            makeRequest({ url: `/doadores/${doadorId}` })
                 .then(response => {
                     setValue('nome', response.data.nome);
                     setValue('cpf', response.data.cpf);
@@ -86,7 +86,7 @@ function Form() {
     }
 
     const askCEP = (cep: string) => {
-        cepRequest({cep})
+        cepRequest({ cep })
             .then(response => {
                 setValue('logradouro', response.data.logradouro);
                 setValue('complemento', response.data.complemento);
@@ -107,23 +107,35 @@ function Form() {
                 <div className="row g-3">
                     <div className="col-12">
                         <input
-                            {...register("nome")}
+                            {...register("nome", {
+                                required: { value: true, message: "Nome é obrigatório, mínimo de 3 caracteres." },
+                                minLength: { value: 3, message: "Nome é obrigatório, mínimo de 3 caracteres." },
+                            })}
                             type="text"
                             className="form-control"
                             name="nome"
                             placeholder="Nome"
                             disabled={isView}
+                            maxLength={120}
                         />
+                        {errors.nome && <div className="invalid-feedback d-block">
+                            {errors.nome.message}
+                        </div>}
                     </div>
                     <div className="col-md-4">
                         <input
-                            {...register("cpf")}
+                            {...register("cpf", {
+                                required: { value: true, message: "CPF é obrigatório" }
+                            })}
                             type="text"
                             className="form-control"
                             name="cpf"
                             placeholder="CPF"
                             disabled={isView}
                         />
+                        {errors.cpf && <div className="invalid-feedback d-block">
+                            {errors.cpf.message}
+                        </div>}
                     </div>
                     <div className="col-md-4">
                         <input
@@ -133,6 +145,7 @@ function Form() {
                             name="rg"
                             placeholder="RG"
                             disabled={isView}
+                            maxLength={17}
                         />
                     </div>
                     <div className="col-md-4">
@@ -190,6 +203,7 @@ function Form() {
                             name="celular"
                             placeholder="Celular"
                             disabled={isView}
+                            maxLength={14}
                         />
                     </div>
                     <div className="col-md-6">
@@ -222,6 +236,7 @@ function Form() {
                             name="cep"
                             placeholder="CEP"
                             disabled={isView}
+                            maxLength={9}
                         />
                     </div>
                     <div className="col-md-9">
@@ -232,6 +247,7 @@ function Form() {
                             name="logradouro"
                             placeholder="Endereço"
                             disabled={isView}
+                            maxLength={120}
                         />
                     </div>
                     <div className="col-md-3">
@@ -242,6 +258,7 @@ function Form() {
                             name="numero"
                             placeholder="Número"
                             disabled={isView}
+                            maxLength={15}
                         />
                     </div>
                     <div className="col-md-6">
@@ -252,6 +269,7 @@ function Form() {
                             name="bairro"
                             placeholder="Bairro"
                             disabled={isView}
+                            maxLength={120}
                         />
                     </div>
                     <div className="col-md-6">
@@ -262,6 +280,7 @@ function Form() {
                             name="localidade"
                             placeholder="Cidade"
                             disabled={isView}
+                            maxLength={120}
                         />
                     </div>
                     <div className="col-md-6">
@@ -308,6 +327,7 @@ function Form() {
                             name="pais"
                             placeholder="País"
                             disabled={isView}
+                            maxLength={50}
                         />
                     </div>
                     <div className="col-md-12">
@@ -318,6 +338,7 @@ function Form() {
                             name="complemento"
                             placeholder="Complemento"
                             disabled={isView}
+                            maxLength={120}
                         />
                     </div>
                 </div>
