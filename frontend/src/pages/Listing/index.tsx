@@ -1,10 +1,10 @@
-import axios from "axios";
 import Pagination from "core/components/Pagination";
 import Search from "core/components/Search";
 import Table from "core/components/Table";
 import { DoadorResponse } from "core/types/Doador";
-import { BASE_URL } from "core/utils/request";
+import { makeRequest } from "core/utils/request";
 import { useEffect, useState } from "react";
+import { messageError } from "core/utils/toastMessages";
 
 function Listing() {
 
@@ -27,11 +27,14 @@ function Listing() {
     }
 
     useEffect(() => {
-        axios.get(`${BASE_URL}/doadores?size=10&page=${pageNumber}`)
+        makeRequest({url:`/doadores?size=10&page=${pageNumber}`})
             .then(response => {
                 const data = response.data as DoadorResponse;
                 setpage(data);
-            });
+            })
+            .catch((error) => {
+                messageError('Erro de conexão')
+            })
     }, [pageNumber]);
 
     return (

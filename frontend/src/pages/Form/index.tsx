@@ -1,11 +1,10 @@
-import axios, { AxiosRequestConfig } from "axios";
-import { BASE_URL } from "core/utils/request";
+import { cepRequest, makeRequest } from "core/utils/request";
+import { messageError, messageSuccess, messageWarning } from "core/utils/toastMessages";
 import dayjs from "dayjs";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
 import BaseForm from "./components/BaseForm";
 
 type FormState = {
@@ -38,14 +37,14 @@ function Form() {
 
     const navigate = useNavigate();
     const { doadorId, state } = useParams<ParamsType>();
-    const { register, setValue } = useForm<FormState>();
+    const { register, setValue, handleSubmit } = useForm<FormState>();
     const isView = state === 'view';
     const isEditing = doadorId !== "create"; // o isEditing é diferente de create?
     const formTitle = isView ? 'Visualiar doador' : isEditing ? 'Editar doador' : 'Cadastrar doador';
 
     useEffect(() => {
         if (isEditing) {
-            axios.get(`${BASE_URL}/doadores/${doadorId}`)
+            makeRequest({url:`/doadores/${doadorId}`})
                 .then(response => {
                     setValue('nome', response.data.nome);
                     setValue('cpf', response.data.cpf);
@@ -67,62 +66,27 @@ function Form() {
         }
     }, [doadorId, isEditing, setValue]);
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const onSubmit = (data: FormState) => {
 
-        event.preventDefault();
+        data.dataNascimento = dayjs(data.dataNascimento).toISOString();
 
-        const nome = (event.target as any).nome.value;
-        const cpf = (event.target as any).cpf.value;
-        const rg = (event.target as any).rg.value;
-        const dataNascimento = dayjs((event.target as any).dataNascimento.value).toISOString();
-        const genero = (event.target as any).genero.value;
-        const estadoCivil = (event.target as any).estadoCivil.value;
-        const grupoSanguineo = (event.target as any).grupoSanguineo.value;
-        const celular = (event.target as any).celular.value;
-        const peso = (event.target as any).peso.value;
-        const logradouro = (event.target as any).logradouro.value;
-        const numero = (event.target as any).numero.value;
-        const complemento = (event.target as any).complemento.value;
-        const bairro = (event.target as any).bairro.value;
-        const cep = (event.target as any).cep.value;
-        const localidade = (event.target as any).localidade.value;
-        const estado = (event.target as any).estado.value;
-
-        const config: AxiosRequestConfig = {
-            baseURL: BASE_URL,
-            method: isEditing ? 'PUT' : 'POST',
+        makeRequest({
             url: isEditing ? `/doadores/${doadorId}` : '/doadores',
-            data: {
-                nome: nome,
-                cpf: cpf,
-                rg: rg,
-                dataNascimento: dataNascimento,
-                genero: genero,
-                estadoCivil: estadoCivil,
-                grupoSanguineo: grupoSanguineo,
-                celular: celular,
-                peso: peso,
-                logradouro: logradouro,
-                numero: numero,
-                complemento: complemento,
-                bairro: bairro,
-                cep: cep,
-                localidade: localidade,
-                estado: estado,
-            }
-        }
-
-        axios(config).then((data) => {
-            toast.info('Doador salvo com sucesso!');
-            navigate('/')
+            method: isEditing ? 'PUT' : 'POST',
+            data
         })
+            .then((response) => {
+                console.log(response);
+                messageSuccess('Doador salvo com sucesso!');
+                navigate(`/`);
+            })
             .catch(() => {
-                toast.error('Erro ao salvar doador!');
+                messageError('Erro ao salvar doador!')
             })
     }
 
     const askCEP = (cep: string) => {
-        axios.get(`https://viacep.com.br/ws/${cep}/json/`)
+        cepRequest({cep})
             .then(response => {
                 setValue('logradouro', response.data.logradouro);
                 setValue('complemento', response.data.complemento);
@@ -132,10 +96,13 @@ function Form() {
                 setValue('estado', response.data.uf);
                 setValue('pais', 'Brasil')
             })
+            .catch(() => {
+                messageWarning('CEP não encontrado!');
+            })
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <BaseForm title={formTitle} isView={isView}>
                 <div className="row g-3">
                     <div className="col-12">
