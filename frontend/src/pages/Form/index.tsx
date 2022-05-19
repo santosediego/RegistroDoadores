@@ -4,8 +4,9 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import BaseForm from "./components/BaseForm";
+import BaseForm from "../../core/components/BaseForm";
 import dayjs from "dayjs";
+import { estados, estadosCivis, genero, gruposSanguineo } from "core/utils/selectOptions";
 
 type FormState = {
     id: number;
@@ -76,7 +77,6 @@ function Form() {
             data
         })
             .then((response) => {
-                console.log(response);
                 messageSuccess('Doador salvo com sucesso!');
                 navigate(`/`);
             })
@@ -102,7 +102,7 @@ function Form() {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} className="container">
             <BaseForm title={formTitle} isView={isView}>
                 <div className="row g-3">
                     <div className="col-12">
@@ -165,8 +165,10 @@ function Form() {
                             name="genero"
                             disabled={isView}
                         >
-                            <option value={"M"} >Masculino</option>
-                            <option value={"F"} >Feminino</option>
+                            {genero.map((genero) => (
+                                <option value={genero.value} >{genero.nome}</option>
+                            ))}
+                            
                         </select>
                     </div>
                     <div className="col-md-4">
@@ -176,11 +178,9 @@ function Form() {
                             name="estadoCivil"
                             disabled={isView}
                         >
-                            <option value={"SOL"} >Solteiro(a)</option>
-                            <option value={"CAS"} >Casado(a)</option>
-                            <option value={"SEP"} >Separado(a)</option>
-                            <option value={"DIV"} >Divorciado(a)</option>
-                            <option value={"VIU"} >Viúvo(a)</option>
+                            {estadosCivis.map((estadoCivil) =>(
+                                <option value={estadoCivil.value} >{estadoCivil.nome}</option>
+                            ))}
                         </select>
                     </div>
                     <div className="col-md-4">
@@ -213,16 +213,9 @@ function Form() {
                             name="grupoSanguineo"
                             disabled={isView}
                         >
-                            <option value={"A+"} >A+</option>
-                            <option value={"B+"} >B+</option>
-                            <option value={"AB+"} >AB+</option>
-                            <option value={"O+"} >O+</option>
-                            <option value={"A-"} >A-</option>
-                            <option value={"B-"} >B-</option>
-                            <option value={"AB-"} >AB-</option>
-                            <option value={"O-"} >O-</option>
-                            <option value={"FO-"} >Falso O-</option>
-                            <option value={"SD"} >Sangue dourado</option>
+                            {gruposSanguineo.map((grupoSanguineo) =>(
+                                <option value={grupoSanguineo.value} >{grupoSanguineo.nome}</option>
+                            ))}
                         </select>
                     </div>
                 </div>
@@ -290,33 +283,9 @@ function Form() {
                             name="estado"
                             disabled={isView}
                         >
-                            <option value={"AC"}>Acre (AC)</option>
-                            <option value={"AL"}>Alagoas (AL)</option>
-                            <option value={"AP"}>Amapá (AP)</option>
-                            <option value={"AM"}>Amazonas (AM)</option>
-                            <option value={"BA"}>Bahia (BA)</option>
-                            <option value={"CE"}>Ceará (CE)</option>
-                            <option value={"DF"}>Distrito Federal (DF)</option>
-                            <option value={"ES"}>Espírito Santo (ES)</option>
-                            <option value={"GO"}>Goiás (GO)</option>
-                            <option value={"MA"}>Maranhão (MA)</option>
-                            <option value={"MT"}>Mato Grosso (MT)</option>
-                            <option value={"MS"}>Mato Grosso do Sul (MS)</option>
-                            <option value={"MG"}>Minas Gerais (MG)</option>
-                            <option value={"PA"}>Pará (PA)</option>
-                            <option value={"PB"}>Paraíba (PB)</option>
-                            <option value={"PR"}>Paraná (PR)</option>
-                            <option value={"PE"}>Pernambuco (PE)</option>
-                            <option value={"PI"}>Piauí (PI)</option>
-                            <option value={"RJ"}>Rio de Janeiro (RJ)</option>
-                            <option value={"RN"}>Rio Grande do Norte (RN)</option>
-                            <option value={"RS"}>Rio Grande do Sul (RS)</option>
-                            <option value={"RO"}>Rondônia (RO)</option>
-                            <option value={"RR"}>Roraima (RR)</option>
-                            <option value={"SC"}>Santa Catarina (SC)</option>
-                            <option value={"SP"}>São Paulo (SP)</option>
-                            <option value={"SE"}>Sergipe (SE)</option>
-                            <option value={"TO"}>Tocantins (TO)</option>
+                            {estados.map((estado) =>(
+                                <option value={estado.value} >{estado.nome}</option>
+                            ))}
                         </select>
                     </div>
                     <div className="col-md-6">

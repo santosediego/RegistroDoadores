@@ -5,7 +5,7 @@ import './styles.css';
 type Props = {
     title: string;
     children: React.ReactNode;
-    isView: boolean;
+    isView?: boolean;
 }
 
 const BaseForm = ({ title, children, isView }: Props) => {

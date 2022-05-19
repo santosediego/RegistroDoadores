@@ -10,6 +10,10 @@ function Search() {
         navigate(`/form/edit/create`);
     }
 
+    const handlePrint = () => {
+        navigate(`/print`);
+    }
+
     return (
         <>
             <div className='container'>
@@ -23,7 +27,7 @@ function Search() {
                         </div>
                         <button className='btn btn-menu' onClick={handleCreate}> Cadastrar</button>
                         <div className='col-md-2'>
-                            <button className='btn btn-menu'>Gerar lista</button>
+                            <button className='btn btn-menu' onClick={handlePrint}>Gerar lista</button>
                         </div>
                     </div>
                 </div>
