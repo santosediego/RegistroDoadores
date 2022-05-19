@@ -3,14 +3,14 @@ import Search from "core/components/Search";
 import Table from "core/components/Table";
 import { DoadorResponse } from "core/types/Doador";
 import { makeRequest } from "core/utils/request";
-import { useEffect, useState } from "react";
-import { messageError } from "core/utils/toastMessages";
+import { useCallback, useEffect, useState } from "react";
+import { messageError, messageInfo } from "core/utils/toastMessages";
 
 function Listing() {
 
     const [pageNumber, setPageNumber] = useState(0);
-    
-    const [page, setpage] = useState<DoadorResponse>({
+
+    const [page, setPage] = useState<DoadorResponse>({
         content: [],
         last: true,
         totalPages: 0,
@@ -22,25 +22,47 @@ function Listing() {
         empty: true
     });
 
-    const handlePageChange = (newPageNumber : number) => {
+    const handlePageChange = (newPageNumber: number) => {
         setPageNumber(newPageNumber);
     }
 
-    useEffect(() => {
-        makeRequest({url:`/doadores?size=10&page=${pageNumber}`})
+    const getDoadores = useCallback(() => {
+
+        makeRequest({ url: `/doadores?size=10&page=${pageNumber}` })
             .then(response => {
                 const data = response.data as DoadorResponse;
-                setpage(data);
+                if(data.totalPages === 1) setPageNumber(0)  ;
+                setPage(data);
             })
             .catch((error) => {
                 messageError('Erro de conexão')
             })
-    }, [pageNumber]);
+    }, [pageNumber])
+
+    useEffect(() => {
+        getDoadores();
+    }, [getDoadores]);
+
+    const onRemove = (doadorId: number) => {
+
+        const confirm = window.confirm('Deseja mesmo excluir este doador?');
+
+        if (confirm) {
+            makeRequest({ url: `/doadores/${doadorId}`, method: 'DELETE' })
+                .then(() => {
+                    messageInfo('Doador removido com sucesso!');
+                    getDoadores();
+                })
+                .catch(() => {
+                    messageError('Erro ao remover doador!');
+                })
+        }
+    }
 
     return (
         <>
             <Search />
-            <Table doadores={page.content} />
+            <Table doadores={page.content} onRemove={onRemove} />
             <Pagination page={page} onChange={handlePageChange} />
         </>
     );

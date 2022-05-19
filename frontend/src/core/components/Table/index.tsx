@@ -2,14 +2,15 @@ import { ReactComponent as ToView } from 'core/assets/img/toView.svg';
 import { ReactComponent as ToEdit } from 'core/assets/img/toEdit.svg';
 import { ReactComponent as Delete } from 'core/assets/img/delete.svg';
 import { Doador } from 'core/types/Doador';
-import './styles.css';
 import { Link } from 'react-router-dom';
+import './styles.css';
 
 type Props = {
     doadores?: Doador[];
+    onRemove: (doadorId: number) => void;
 }
 
-function Table({ doadores }: Props) {
+function Table({ doadores, onRemove }: Props) {
 
     return (
         <div className="container">
@@ -35,7 +36,13 @@ function Table({ doadores }: Props) {
                                 <Link to={`form/edit/${doador.id}`} type="button" title='Editar' className="btn vidas-table-ToView" >
                                     <ToEdit />
                                 </Link>
-                                <button className="btn" title='Excluir'><Delete /></button>
+                                <button
+                                    className="btn"
+                                    title='Excluir'
+                                    onClick={() => onRemove(doador.id)}
+                                >
+                                    <Delete />
+                                </button>
                             </td>
                         </tr>
                     ))}
