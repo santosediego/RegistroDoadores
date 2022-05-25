@@ -1,19 +1,20 @@
 import { cepRequest, makeRequest } from "core/utils/request";
 import { messageError, messageSuccess, messageWarning } from "core/utils/toastMessages";
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import BaseForm from "../../core/components/BaseForm";
 import dayjs from "dayjs";
 import { estados, estadosCivis, genero, gruposSanguineo } from "core/utils/selectOptions";
+import MaskedInput from "core/utils/MaskedInput";
 
 type FormState = {
     id: number;
     nome: string;
     cpf: string;
     rg: string;
-    dataNascimento: string
+    dataNascimento: string;
     genero: string;
     estadoCivil: string;
     grupoSanguineo: string;
@@ -38,7 +39,7 @@ function Form() {
 
     const navigate = useNavigate();
     const { doadorId, state } = useParams<ParamsType>();
-    const { register, setValue, handleSubmit, formState: { errors } } = useForm<FormState>();
+    const { register, setValue, handleSubmit, control, formState: { errors } } = useForm<FormState>();
     const isView = state === 'view';
     const isEditing = doadorId !== "create"; // o isEditing é diferente de create?
     const formTitle = isView ? 'Visualiar doador' : isEditing ? 'Editar doador' : 'Cadastrar doador';
@@ -108,8 +109,8 @@ function Form() {
                     <div className="col-12">
                         <input
                             {...register("nome", {
-                                required: { value: true, message: "Nome é obrigatório, mínimo de 3 caracteres." },
-                                minLength: { value: 3, message: "Nome é obrigatório, mínimo de 3 caracteres." },
+                                required: { value: true, message: "Nome é obrigatório." },
+                                minLength: { value: 2, message: "Nome é obrigatório, mínimo de 2 caracteres." },
                             })}
                             type="text"
                             className="form-control"
@@ -123,39 +124,71 @@ function Form() {
                         </div>}
                     </div>
                     <div className="col-md-4">
-                        <input
-                            {...register("cpf", {
-                                required: { value: true, message: "CPF é obrigatório" }
-                            })}
-                            type="text"
-                            className="form-control"
+                        <Controller
                             name="cpf"
-                            placeholder="CPF"
-                            disabled={isView}
+                            control={control}
+                            rules={{
+                                required: { value: true, message: "CPF é obrigatório" },
+                                minLength: { value: 14, message: "CPF é obrigatório, mínimo de 14 caracteres." },
+                            }}
+                            render={({ field: { onChange, name, value } }) => {
+                                return (
+                                    <MaskedInput
+                                        mask={"999.999.999-99"}
+                                        name={name}
+                                        value={value}
+                                        onChange={onChange}
+                                        disabled={isView}
+                                        className="form-control"
+                                        placeholder={"CPF"}
+                                    />
+                                )
+                            }}
                         />
                         {errors.cpf && <div className="invalid-feedback d-block">
                             {errors.cpf.message}
                         </div>}
                     </div>
                     <div className="col-md-4">
-                        <input
-                            {...register("rg")}
-                            type="text"
-                            className="form-control"
+                        <Controller
                             name="rg"
-                            placeholder="RG"
-                            disabled={isView}
-                            maxLength={17}
+                            control={control}
+                            render={({ field: { onChange, name, value } }) => {
+                                return (
+                                    <MaskedInput
+                                        mask={"99-999.999"}
+                                        name={name}
+                                        value={value}
+                                        onChange={onChange}
+                                        disabled={isView}
+                                        className="form-control"
+                                        placeholder={"RG"}
+                                    />
+                                )
+                            }}
                         />
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-2">
                         <input
                             {...register("dataNascimento")}
                             type="date"
                             className="form-control"
                             name="dataNascimento"
-                            placeholder="Data Nascimento"
+                            placeholder="Data de Nascimento"
                             disabled={isView}
+                        />
+                    </div>
+                    <div className="col-md-2">
+                        <input
+                            {...register("peso")}
+                            type="number"
+                            className="form-control"
+                            name="peso"
+                            placeholder="Peso"
+                            step={"0.01"}
+                            min={0}
+                            disabled={isView}
+                            max={300}
                         />
                     </div>
                     <div className="col-md-4">
@@ -168,7 +201,7 @@ function Form() {
                             {genero.map((genero) => (
                                 <option value={genero.value} >{genero.nome}</option>
                             ))}
-                            
+
                         </select>
                     </div>
                     <div className="col-md-4">
@@ -178,49 +211,46 @@ function Form() {
                             name="estadoCivil"
                             disabled={isView}
                         >
-                            {estadosCivis.map((estadoCivil) =>(
+                            {estadosCivis.map((estadoCivil) => (
                                 <option value={estadoCivil.value} >{estadoCivil.nome}</option>
                             ))}
                         </select>
                     </div>
                     <div className="col-md-4">
-                        <input
-                            {...register("peso")}
-                            type="number"
-                            className="form-control"
-                            name="peso"
-                            placeholder="Peso"
-                            step={"0.01"}
-                            min={0}
-                            disabled={isView}
-                        />
-                    </div>
-                    <div className="col-md-6">
-                        <input
-                            {...register("celular")}
-                            type="text"
-                            className="form-control"
-                            name="celular"
-                            placeholder="Celular"
-                            disabled={isView}
-                            maxLength={14}
-                        />
-                    </div>
-                    <div className="col-md-6">
+
                         <select
                             {...register("grupoSanguineo")}
                             className="form-select"
                             name="grupoSanguineo"
                             disabled={isView}
                         >
-                            {gruposSanguineo.map((grupoSanguineo) =>(
+                            {gruposSanguineo.map((grupoSanguineo) => (
                                 <option value={grupoSanguineo.value} >{grupoSanguineo.nome}</option>
                             ))}
                         </select>
                     </div>
+                    <div className="col-md-4">
+                        <Controller
+                            name="celular"
+                            control={control}
+                            render={({ field: { onChange, name, value } }) => {
+                                return (
+                                    <MaskedInput
+                                        mask={"(99) 9 9999-9999"}
+                                        name={name}
+                                        value={value}
+                                        onChange={onChange}
+                                        disabled={isView}
+                                        className="form-control"
+                                        placeholder={"Celular"}
+                                    />
+                                )
+                            }}
+                        />
+                    </div>
                 </div>
                 <div className="row g-3">
-                    <div className="col-md-6 mt-5">
+                    <div className="col-md-4 mt-5">
                         <input
                             {...register("cep")}
                             type="text"
@@ -283,7 +313,7 @@ function Form() {
                             name="estado"
                             disabled={isView}
                         >
-                            {estados.map((estado) =>(
+                            {estados.map((estado) => (
                                 <option value={estado.value} >{estado.nome}</option>
                             ))}
                         </select>

@@ -10,9 +10,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.santosediego</groupId>
-	<artifactId>VidasPorVidas</artifactId>
+	<artifactId>VidaPorVidas</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>VidasPorVidas</name>
+	<name>VidaPorVidas</name>
 	<description>Projeto cadastro de doadores</description>
 	<properties>
 		<java.version>17</java.version>
