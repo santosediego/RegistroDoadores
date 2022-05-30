@@ -16,6 +16,7 @@ function Print() {
 
     const { handleSubmit } = useForm<FormState>();
 
+    const [selectedDate, setSelectedDate] = useState('')
     const [doadores, setDoadores] = useState<Doador[]>([]);
     const [selectedDoadores, setSelectedDoadores] = useState<Doador[]>([]);
     const [listDoadores, setListDoadores] = useState<Doador[]>([]);
@@ -70,7 +71,7 @@ function Print() {
     }
 
     const onSubmit = () => {
-        DoadoresPDF(listDoadores);
+        DoadoresPDF(listDoadores, selectedDate);
         messageSuccess('Listagem gerada com sucesso!')
     }
 
@@ -81,7 +82,16 @@ function Print() {
         >
             <BaseForm title="Lista de doadores">
                 <div className="row g-3 mb-5">
-                    <div className="col-md-10">
+                    <div className="col-md-2">
+                        <input
+                            name='date'
+                            type="date"
+                            className='form-control'
+                            onChange={date => setSelectedDate(date.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="col-md-8">
                         <Select
                             name="doadores"
                             value={selectedDoadores}

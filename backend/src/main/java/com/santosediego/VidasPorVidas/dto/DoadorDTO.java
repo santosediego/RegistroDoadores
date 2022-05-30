@@ -15,7 +15,7 @@ public class DoadorDTO implements Serializable{
 	private Long id;
 
 	@NotBlank(message = "Preenchimento obrigatório!")
-	@Size(min = 3, max = 120, message = "O tamanho deve ser entre 3 e 120 caracteres.")
+	@Size(min = 2, max = 120, message = "O tamanho deve ser entre 3 e 120 caracteres.")
 	private String nome;
 
 	@NotBlank(message = "Preenchimento obrigatório!")

@@ -82,7 +82,7 @@ public class DoadorService {
 
 			return new DoadorDTO(doador);
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Violação de integridade", e);
+			throw new DataIntegrityException("CPF já cadastrado!");
 		}
 	}
 
