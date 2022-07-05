@@ -1,7 +1,7 @@
 import { ReactComponent as Delete } from 'core/assets/img/delete.svg';
 import BaseForm from "core/components/BaseForm";
 import { Doador } from "core/types/Doador";
-import { makeRequest } from "core/utils/request";
+import { makePrivateRequest } from "core/utils/request";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Select from 'react-select';
@@ -24,7 +24,7 @@ function Print() {
 
     useEffect(() => {
         setIsLoadingDoadores(true);
-        makeRequest({ url: '/doadores/export' })
+        makePrivateRequest({ url: '/doadores/export' })
             .then(response => setDoadores(response.data)
             )
             .finally(() => setIsLoadingDoadores(false));

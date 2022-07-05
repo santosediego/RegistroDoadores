@@ -1,4 +1,4 @@
-import { cepRequest, makeRequest } from "core/utils/request";
+import { cepRequest, makePrivateRequest } from "core/utils/request";
 import { messageError, messageSuccess, messageWarning } from "core/utils/toastMessages";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -46,7 +46,7 @@ function Form() {
 
     useEffect(() => {
         if (isEditing) {
-            makeRequest({ url: `/doadores/${doadorId}` })
+            makePrivateRequest({ url: `/doadores/${doadorId}` })
                 .then(response => {
                     setValue('nome', response.data.nome);
                     setValue('cpf', response.data.cpf);
@@ -72,7 +72,7 @@ function Form() {
 
         data.dataNascimento = dayjs(data.dataNascimento).toISOString();
 
-        makeRequest({
+        makePrivateRequest({
             url: isEditing ? `/doadores/${doadorId}` : '/doadores',
             method: isEditing ? 'PUT' : 'POST',
             data

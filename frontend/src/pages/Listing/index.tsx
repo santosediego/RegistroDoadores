@@ -2,7 +2,7 @@ import Pagination from "core/components/Pagination";
 import Search from "core/components/Search";
 import Table from "core/components/Table";
 import { DoadorResponse } from "core/types/Doador";
-import { makeRequest } from "core/utils/request";
+import { makePrivateRequest } from "core/utils/request";
 import { useCallback, useEffect, useState } from "react";
 import { messageError, messageInfo } from "core/utils/toastMessages";
 
@@ -28,14 +28,14 @@ function Listing() {
 
     const getDoadores = useCallback(() => {
 
-        makeRequest({ url: `/doadores?size=10&page=${pageNumber}` })
+        makePrivateRequest({ url: `/doadores?size=10&page=${pageNumber}` })
             .then(response => {
                 const data = response.data as DoadorResponse;
-                if(data.totalPages === 1) setPageNumber(0)  ;
+                if (data.totalPages === 1) setPageNumber(0);
                 setPage(data);
             })
             .catch((error) => {
-                messageError('Erro de conexão')
+                messageError('Erro de conexão');
             })
     }, [pageNumber])
 
@@ -48,7 +48,7 @@ function Listing() {
         const confirm = window.confirm('Deseja mesmo excluir este doador?');
 
         if (confirm) {
-            makeRequest({ url: `/doadores/${doadorId}`, method: 'DELETE' })
+            makePrivateRequest({ url: `/doadores/${doadorId}`, method: 'DELETE' })
                 .then(() => {
                     messageInfo('Doador removido com sucesso!');
                     getDoadores();
