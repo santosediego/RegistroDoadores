@@ -27,7 +27,6 @@ type FormState = {
     cep: string;
     localidade: string;
     estado: string;
-    pais: string;
 }
 
 type ParamsType = {
@@ -95,7 +94,6 @@ function Form() {
                 setValue('cep', response.data.cep);
                 setValue('localidade', response.data.localidade);
                 setValue('estado', response.data.uf);
-                setValue('pais', 'Brasil')
             })
             .catch(() => {
                 messageWarning('CEP não encontrado!');
@@ -319,17 +317,6 @@ function Form() {
                         </select>
                     </div>
                     <div className="col-md-6">
-                        <input
-                            {...register("pais")}
-                            type="text"
-                            className="form-control"
-                            name="pais"
-                            placeholder="País"
-                            disabled={isView}
-                            maxLength={50}
-                        />
-                    </div>
-                    <div className="col-md-12">
                         <input
                             {...register("complemento")}
                             type="text"
