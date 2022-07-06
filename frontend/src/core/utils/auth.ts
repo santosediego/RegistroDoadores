@@ -1,4 +1,5 @@
 import jwtDecode from 'jwt-decode';
+import { history } from './history';
 
 export const CLIENT_ID = process.env.REACT_APP_CLIENT_ID ?? 'vidaporvidas';
 export const CLIENT_SECRET = process.env.REACT_APP_CLIENT_SECRET ?? 'vidaporvidas123';
@@ -54,4 +55,10 @@ export const isAuthenticated = () => {
     const sessionData = getSessionData();
 
     return sessionData.access_token && isTokenValid();
+}
+
+// Faz o logout
+export const logout = () =>{
+    localStorage.removeItem("authData"); // Limpa a chave, se usado .clear() limpa tudo;
+    history.replace('/auth');
 }

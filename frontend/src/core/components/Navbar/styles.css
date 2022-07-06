@@ -5,6 +5,11 @@ header {
     align-items: center;
 }
 
+.vidas-nav {
+    display: flex;
+    justify-content: space-between;
+}
+
 .vidas-nav-content {
     display: flex;
     justify-content: space-between;
