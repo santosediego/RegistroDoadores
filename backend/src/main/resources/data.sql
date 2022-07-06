@@ -1,4 +1,4 @@
-INSERT INTO TBL_USER (NAME, PASSWORD, USER) VALUES ('Admin', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG', 'admin');
+INSERT INTO tb_user (NAME, PASSWORD, USERNAME) VALUES ('Admin', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG', 'admin');
 
 INSERT INTO tb_doador (nome, cpf , rg, data_nascimento, grupo_sanguineo, peso, genero, estado_civil, celular, telefone, data_cadastro)
 values ('José Maria', '362.389.160-60', '45.359.598', TIMESTAMP WITH TIME ZONE '1964-03-26T03:00:00.00000Z', 'A+', 87.5, 'M', 'CAS', '(34)98357-9114', '(34)3944-9251', NOW()),

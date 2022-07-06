@@ -3,6 +3,8 @@ import Form from "pages/Form";
 import Listing from "pages/Listing";
 import Print from "pages/Print";
 import Auth from "pages/Auth";
+
+import { PrivateRoute } from "core/utils/PrivateRoute";
 import { Routes, Route } from "react-router-dom";
 import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
 import { history } from "core/utils/history";
@@ -17,10 +19,31 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/auth" element={<Auth />} />
-          <Route path="/" element={<Listing />} />
-          <Route path="/print" element={<Print />} />
-          <Route path="/form/:doadorId" element={<Form />} />
-          <Route path="/form/:state/:doadorId" element={<Form />} />
+          <Route path="/" element={
+            <PrivateRoute>
+              <Listing />
+            </PrivateRoute>
+          } />
+          <Route path="/print" element={
+            <PrivateRoute>
+              <Print />
+            </PrivateRoute>
+          } />
+          <Route path="/form/:doadorId" element={
+            <PrivateRoute>
+              <Form />
+            </PrivateRoute>
+          } />
+          <Route path="/form/:state/:doadorId" element={
+            <PrivateRoute>
+              <Form />
+            </PrivateRoute>
+          } />
+          <Route path="*" element={
+            <PrivateRoute>
+              <Listing />
+            </PrivateRoute>
+          } />
         </Routes>
       </HistoryRouter>
     </>

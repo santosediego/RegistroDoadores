@@ -35,7 +35,12 @@ function Listing() {
                 setPage(data);
             })
             .catch((error) => {
-                messageError('Erro de conexão');
+                console.log(error.response)
+                if (error.response.status === 401 || error.response.status === 403) {
+                    messageError('Favor, fazer o login');
+                } else{
+                    messageError('Erro de conexão');
+                }
             })
     }, [pageNumber])
 

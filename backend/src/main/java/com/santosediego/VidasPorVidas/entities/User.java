@@ -15,7 +15,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-@Table(name = "tbl_user")
+@Table(name = "tb_user")
 public class User implements UserDetails, Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -28,7 +28,7 @@ public class User implements UserDetails, Serializable {
 	private String name;
 
 	@Column(unique = true, length = 20)
-	private String user;
+	private String username;
 
 	@Column(length = 60)
 	private String password;
@@ -36,10 +36,10 @@ public class User implements UserDetails, Serializable {
 	public User() {
 	}
 
-	public User(Long id, String name, String user, String password) {
+	public User(Long id, String name, String username, String password) {
 		this.id = id;
 		this.name = name;
-		this.user = user;
+		this.username = username;
 		this.password = password;
 	}
 
@@ -59,12 +59,12 @@ public class User implements UserDetails, Serializable {
 		this.name = name;
 	}
 
-	public String getUser() {
-		return user;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {
@@ -95,11 +95,6 @@ public class User implements UserDetails, Serializable {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return null;
-	}
-
-	@Override
-	public String getUsername() {
-		return user;
 	}
 
 	@Override
