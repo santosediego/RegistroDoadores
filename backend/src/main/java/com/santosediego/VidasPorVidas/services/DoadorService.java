@@ -1,5 +1,6 @@
 package com.santosediego.VidasPorVidas.services;
 
+import java.text.Normalizer;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -38,8 +39,14 @@ public class DoadorService {
 	private EnderecoRepository enderecoRepository;
 
 	@Transactional(readOnly = true)
-	public Page<DoadorDTO> findAll(Pageable pegeable) {
-		Page<Doador> result = doadorRepository.findAll(pegeable);
+	public Page<DoadorDTO> findAll(String conditions, Pageable pegeable) {
+
+		// Filters what the user has typed, stripping dots and converting to lowercase
+		String filterConditions = Normalizer.normalize(conditions, Normalizer.Form.NFD)
+				.replaceAll("[^\\p{ASCII}]", "").toLowerCase();
+
+
+		Page<Doador> result = doadorRepository.findDoadores(filterConditions, pegeable);
 		Page<DoadorDTO> page = result.map(x -> new DoadorDTO(x));
 		return page;
 	}

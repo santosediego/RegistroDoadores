@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -31,8 +32,10 @@ public class DoadorController {
 	private DoadorService service;
 
 	@GetMapping
-	public Page<DoadorDTO> findAll(Pageable pegeable) {
-		return service.findAll(pegeable);
+	public Page<DoadorDTO> findAll(
+			@RequestParam(value = "conditions", defaultValue = "") String conditions,
+			Pageable pegeable) {
+		return service.findAll(conditions, pegeable);
 	}
 
 	@GetMapping(value = "/{id}")
