@@ -17,3 +17,10 @@ a, a:hover {
   text-decoration: none;
   color: unset;
 }
+
+@media (max-width: 767px) {
+
+  .container {
+      max-width: 700px;
+  }
+}

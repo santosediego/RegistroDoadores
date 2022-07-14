@@ -1,5 +1,5 @@
 import Pagination from "core/components/Pagination";
-import Search from "core/components/Search";
+import Search, { FilterForm } from "core/components/Search";
 import Table from "core/components/Table";
 import { DoadorResponse } from "core/types/Doador";
 import { makePrivateRequest } from "core/utils/request";
@@ -15,20 +15,27 @@ function Listing() {
         last: true,
         totalPages: 0,
         totalElements: 0,
-        size: 12,
+        size: 10,
         number: 0,
         first: true,
         numberOfElements: 0,
-        empty: true
+        empty: true,
     });
 
     const handlePageChange = (newPageNumber: number) => {
         setPageNumber(newPageNumber);
     }
 
-    const getDoadores = useCallback(() => {
+    const getDoadores = useCallback(( search?: FilterForm) => {
 
-        makePrivateRequest({ url: `/doadores?size=10&page=${pageNumber}` })
+        const params = {
+            page: pageNumber,
+            size: 10,
+            sort: 'nome,asc',
+            conditions: search?.search
+        }
+
+        makePrivateRequest({ url: `/doadores`, params })
             .then(response => {
                 const data = response.data as DoadorResponse;
                 if (data.totalPages === 1) setPageNumber(0);
@@ -66,7 +73,7 @@ function Listing() {
 
     return (
         <>
-            <Search />
+            <Search onSearch={search => getDoadores(search)} />
             <Table doadores={page.content} onRemove={onRemove} />
             <Pagination page={page} onChange={handlePageChange} />
         </>
