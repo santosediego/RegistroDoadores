@@ -6,8 +6,11 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,5 +70,17 @@ public class DoadorController {
 	public ResponseEntity<DoadorDTO> delete(@PathVariable Long id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
+	}
+
+	@GetMapping("/download")
+	public ResponseEntity<?> download() {
+
+		Resource resource = service.provideFileCSV();
+
+		String contentType = "application/octet-stream";
+		String headerValue = "attachment; filename=\"" + resource.getFilename() + "\"";
+
+		return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
+				.header(HttpHeaders.CONTENT_DISPOSITION, headerValue).body(resource);
 	}
 }

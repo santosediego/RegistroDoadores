@@ -1,5 +1,11 @@
 package com.santosediego.VidasPorVidas.services;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.Normalizer;
 import java.time.Instant;
 import java.util.List;
@@ -10,6 +16,8 @@ import javax.persistence.EntityNotFoundException;
 
 import org.springdoc.api.OpenApiResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -17,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.opencsv.CSVWriter;
 import com.santosediego.VidasPorVidas.dto.DoadorDTO;
 import com.santosediego.VidasPorVidas.dto.DoadorExportDTO;
 import com.santosediego.VidasPorVidas.entities.Doador;
@@ -31,6 +40,9 @@ import com.santosediego.VidasPorVidas.services.exceptions.ResourceNotFoundExcept
 
 @Service
 public class DoadorService {
+
+	private String fileName = "doadores.csv";
+	private Path foundFile;
 
 	@Autowired
 	private DoadorRepository doadorRepository;
@@ -97,7 +109,6 @@ public class DoadorService {
 	public DoadorDTO update(Long id, DoadorDTO dto) {
 
 		try {
-
 			Optional<Doador> obj = doadorRepository.findById(id);
 			Doador doador = obj.orElseThrow(() -> new ResourceNotFoundException("Entidade não encontrada"));
 			Endereco endereco = doador.getEndereco();
@@ -155,5 +166,110 @@ public class DoadorService {
 		endereco.setCep(dto.getCep());
 		endereco.setLocalidade(dto.getLocalidade());
 		endereco.setEstado(dto.getEstado());
+	}
+
+	// Provide file CSV
+	public Resource provideFileCSV() {
+
+		// String fileName = "doadores.csv";
+		Path directory = createDirectory();
+		writeDataInFileCSV(directory + "/" + fileName);
+
+		try {
+			Files.list(directory).forEach(file -> {
+				if (file.getFileName().toString().startsWith(fileName)) {
+					foundFile = file;
+					return;
+				}
+			});
+
+			if (foundFile != null) {
+				return new UrlResource(foundFile.toUri());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	// Create directory for file
+	private Path createDirectory() {
+		Path directory = Paths.get("export");
+
+		try {
+			if (!Files.exists(directory)) {
+				Files.createDirectories(directory);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return directory;
+	}
+
+	// Write data in file CSV
+	private void writeDataInFileCSV(String filePath) {
+
+		File file = new File(filePath);
+
+		try {
+			// create FileWriter object with file as parameter
+			FileWriter outputfile = new FileWriter(file);
+
+			// create CSVWriter with ';' as separator
+			CSVWriter writer = new CSVWriter(outputfile, ';', CSVWriter.NO_QUOTE_CHARACTER,
+					CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
+
+			// adding header to csv
+			writer.writeNext(createHeader());
+
+			// add data to csv
+			List<Doador> doadores = doadorRepository.findAll();
+
+			doadores.forEach(doador -> {
+				writer.writeNext(createLine(doador));
+			});
+
+			// closing writer connection
+			writer.close();
+
+		} catch (IOException e) { // TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	// Create file header CSV
+	private String[] createHeader() {
+		return new String[] {
+				"Id", "Nome", "CPF", "RG", "Data Nascimento", "Genero", "Estado Cívil", "Grupo Sanguíneo"
+				, "Celular", "Peso", "Logradouro", "Número", "Complemento", "Bairro", "CEP", "Localidade"
+				, "Estado", "Data Cadastro", "Data Alteração"	
+		};
+	}
+
+	// Create file line CSV
+	private String[] createLine(Doador doador) {
+		return new String[] {
+				(doador.getId() == null) ? "" : doador.getId().toString(),
+				(doador.getNome() == null) ? "" : doador.getNome(),
+				(doador.getCpf() == null) ? "" : doador.getCpf(),
+				(doador.getRg() == null) ? "" : doador.getRg(),
+				(doador.getDataNascimento() == null) ? "" : doador.getDataNascimento().toString(),
+				(doador.getGenero() == null) ? "" : doador.getGenero(),
+				(doador.getEstadoCivil() == null) ? "" : doador.getEstadoCivil().getId(),
+				(doador.getGrupoSanquineo() == null) ? "" : doador.getGrupoSanquineo().getId(),
+				(doador.getCelular() == null) ? "" : doador.getCelular(),
+				(doador.getPeso() == null) ? "" : doador.getPeso().toString(),
+				(doador.getEndereco().getLogradouro() == null) ? "" : doador.getEndereco().getLogradouro(),
+				(doador.getEndereco().getNumero() == null) ? "" : doador.getEndereco().getNumero(),
+				(doador.getEndereco().getComplemento() == null) ? "" : doador.getEndereco().getComplemento(),
+				(doador.getEndereco().getBairro() == null) ? "" : doador.getEndereco().getBairro(),
+				(doador.getEndereco().getCep() == null) ? "" : doador.getEndereco().getCep(),
+				(doador.getEndereco().getLocalidade() == null) ? "" : doador.getEndereco().getLocalidade(),
+				(doador.getEndereco().getEstado() == null) ? "" : doador.getEndereco().getEstado(),
+				(doador.getDataCadastro() == null) ? "" : doador.getDataCadastro().toString(),
+				(doador.getDataAlteracao() == null) ? "" : doador.getDataAlteracao().toString(),
+		};
 	}
 }
