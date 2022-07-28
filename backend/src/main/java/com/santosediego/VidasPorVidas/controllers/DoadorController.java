@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.santosediego.VidasPorVidas.dto.DoadorDTO;
@@ -82,5 +83,12 @@ public class DoadorController {
 
 		return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
 				.header(HttpHeaders.CONTENT_DISPOSITION, headerValue).body(resource);
+	}
+
+	@PostMapping("/upload")
+	public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile multipartFile) {
+
+		List<DoadorDTO> listDTO = service.uploadFile(multipartFile);
+		return ResponseEntity.ok().body(listDTO);
 	}
 }

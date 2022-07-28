@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.santosediego.VidasPorVidas.services.exceptions.DataIntegrityException;
 import com.santosediego.VidasPorVidas.services.exceptions.DatabaseException;
+import com.santosediego.VidasPorVidas.services.exceptions.ResourceIOException;
 import com.santosediego.VidasPorVidas.services.exceptions.ResourceNotFoundException;
 
 @ControllerAdvice
@@ -71,6 +72,18 @@ public class ResourceExceptionHandler implements Serializable {
 			err.addError(f.getField(), f.getDefaultMessage());
 		}
 
+		return ResponseEntity.status(status).body(err);
+	}
+	
+	@ExceptionHandler(ResourceIOException.class)
+	public ResponseEntity<StandardError> ioException(ResourceIOException e, HttpServletRequest request) {
+		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+		StandardError err = new StandardError();
+		err.setTimestamp(Instant.now());
+		err.setStatus(status.value());
+		err.setError("IOException");
+		err.setMessage(e.getMessage());
+		err.setPath(request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
 	}
 }

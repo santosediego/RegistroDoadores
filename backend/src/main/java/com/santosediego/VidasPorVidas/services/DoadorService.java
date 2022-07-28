@@ -1,13 +1,18 @@
 package com.santosediego.VidasPorVidas.services;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.Normalizer;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,8 +29,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
 import com.opencsv.CSVWriter;
+import com.opencsv.exceptions.CsvException;
+import com.opencsv.exceptions.CsvValidationException;
 import com.santosediego.VidasPorVidas.dto.DoadorDTO;
 import com.santosediego.VidasPorVidas.dto.DoadorExportDTO;
 import com.santosediego.VidasPorVidas.entities.Doador;
@@ -36,6 +48,7 @@ import com.santosediego.VidasPorVidas.repositories.DoadorRepository;
 import com.santosediego.VidasPorVidas.repositories.EnderecoRepository;
 import com.santosediego.VidasPorVidas.services.exceptions.DataIntegrityException;
 import com.santosediego.VidasPorVidas.services.exceptions.DatabaseException;
+import com.santosediego.VidasPorVidas.services.exceptions.ResourceIOException;
 import com.santosediego.VidasPorVidas.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -54,9 +67,8 @@ public class DoadorService {
 	public Page<DoadorDTO> findAll(String conditions, Pageable pegeable) {
 
 		// Filters what the user has typed, stripping dots and converting to lowercase
-		String filterConditions = Normalizer.normalize(conditions, Normalizer.Form.NFD)
-				.replaceAll("[^\\p{ASCII}]", "").toLowerCase();
-
+		String filterConditions = Normalizer.normalize(conditions, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "")
+				.toLowerCase();
 
 		Page<Doador> result = doadorRepository.findDoadores(filterConditions, pegeable);
 		Page<DoadorDTO> page = result.map(x -> new DoadorDTO(x));
@@ -140,6 +152,42 @@ public class DoadorService {
 		}
 	}
 
+	// Provide file CSV
+	public Resource provideFileCSV() {
+
+		try {
+			Path directory = createDirectory("export");
+			writeDataInFileCSV(directory + "/" + fileName);
+
+			Files.list(directory).forEach(file -> {
+				if (file.getFileName().toString().startsWith(fileName)) {
+					foundFile = file;
+					return;
+				}
+			});
+
+			return new UrlResource(foundFile.toUri());
+		} catch (IOException e) {
+			throw new ResourceIOException(e.getMessage());
+		}
+	}
+
+	public List<DoadorDTO> uploadFile(MultipartFile multipartFile) {
+
+		if (!multipartFile.isEmpty() && multipartFile.getContentType().equals("text/csv") || multipartFile.getName().equals("doadores")) {
+			
+			List<DoadorDTO> listDto = new ArrayList<DoadorDTO>();
+			Path filePath = saveFile(multipartFile);
+
+			if (filePath != null)
+				listDto = importData(filePath);
+
+			return listDto;
+		} else {
+			throw new ResourceIOException("Arquivo incompatível!");
+		}
+	}
+
 	private void copyDtoToEntity(DoadorDTO dto, Doador doador, Endereco endereco) {
 
 		doador.setNome(dto.getNome());
@@ -168,52 +216,12 @@ public class DoadorService {
 		endereco.setEstado(dto.getEstado());
 	}
 
-	// Provide file CSV
-	public Resource provideFileCSV() {
-
-		// String fileName = "doadores.csv";
-		Path directory = createDirectory();
-		writeDataInFileCSV(directory + "/" + fileName);
-
-		try {
-			Files.list(directory).forEach(file -> {
-				if (file.getFileName().toString().startsWith(fileName)) {
-					foundFile = file;
-					return;
-				}
-			});
-
-			if (foundFile != null) {
-				return new UrlResource(foundFile.toUri());
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-
-	// Create directory for file
-	private Path createDirectory() {
-		Path directory = Paths.get("export");
-
-		try {
-			if (!Files.exists(directory)) {
-				Files.createDirectories(directory);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return directory;
-	}
-
 	// Write data in file CSV
 	private void writeDataInFileCSV(String filePath) {
 
-		File file = new File(filePath);
-
 		try {
+			File file = new File(filePath);
+
 			// create FileWriter object with file as parameter
 			FileWriter outputfile = new FileWriter(file);
 
@@ -234,18 +242,16 @@ public class DoadorService {
 			// closing writer connection
 			writer.close();
 
-		} catch (IOException e) { // TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (IOException e) {
+			throw new ResourceIOException(e.getMessage());
 		}
 	}
 
 	// Create file header CSV
 	private String[] createHeader() {
-		return new String[] {
-				"Id", "Nome", "CPF", "RG", "Data Nascimento", "Genero", "Estado Cívil", "Grupo Sanguíneo"
-				, "Celular", "Peso", "Logradouro", "Número", "Complemento", "Bairro", "CEP", "Localidade"
-				, "Estado", "Data Cadastro", "Data Alteração"	
-		};
+		return new String[] { "Id", "Nome", "CPF", "RG", "Data Nascimento", "Gênero", "Estado Civil", "Grupo Sanguíneo",
+				"Celular", "Peso", "Logradouro", "Número", "Complemento", "Bairro", "CEP", "Localidade", "Estado",
+				"Data Cadastro", "Data Alteração" };
 	}
 
 	// Create file line CSV
@@ -269,7 +275,85 @@ public class DoadorService {
 				(doador.getEndereco().getLocalidade() == null) ? "" : doador.getEndereco().getLocalidade(),
 				(doador.getEndereco().getEstado() == null) ? "" : doador.getEndereco().getEstado(),
 				(doador.getDataCadastro() == null) ? "" : doador.getDataCadastro().toString(),
-				(doador.getDataAlteracao() == null) ? "" : doador.getDataAlteracao().toString(),
+				(doador.getDataAlteracao() == null) ? "" : doador.getDataAlteracao().toString()
 		};
+	}
+
+	// Create directory for file
+	private Path createDirectory(String nameDirectory) {
+
+		try {
+			Path directory = Paths.get(nameDirectory);
+
+			if (!Files.exists(directory)) {
+				Files.createDirectories(directory);
+			}
+
+			return directory;
+		} catch (IOException e) {
+			throw new ResourceIOException(e.getMessage());
+		}
+	}
+
+	// Save file in internal directory
+	private Path saveFile(MultipartFile multipartFile) {
+
+		Path directory = createDirectory("import");
+		String fileName = multipartFile.getOriginalFilename();
+
+		try (InputStream inputStream = multipartFile.getInputStream()) {
+			Path filePath = directory.resolve(fileName);
+			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+			return filePath;
+		} catch (IOException e) {
+			throw new ResourceIOException(e.getMessage());
+		}
+	}
+
+	@Transactional
+	private List<DoadorDTO> importData(Path filePath) {
+
+		try {
+
+			List<DoadorDTO> listDto = new ArrayList<DoadorDTO>();
+
+			// Create an object of filereader class with CSV file as a parameter.
+			FileReader filereader = new FileReader(filePath.toString());
+
+			// create csvParser object with custom separator semi-colon
+			CSVParser parser = new CSVParserBuilder().withSeparator(';').build();
+
+			// create csvReader object passing file reader as a parameter
+			CSVReader csvReader = new CSVReaderBuilder(filereader).withCSVParser(parser).withSkipLines(1).build();
+
+			List<String[]> allData = csvReader.readAll();
+			for (String[] row : allData) {
+				for (String cell : row) {
+
+					String[] vect = cell.split(",");
+					Optional<Doador> obj = doadorRepository.findByCpf(vect[2]);
+
+					if (obj.isEmpty()) {
+						DoadorDTO dto = new DoadorDTO(null, vect[1], vect[2], vect[3], Instant.parse(vect[4]), vect[5],
+								vect[6], vect[7], vect[8], null, Double.parseDouble(vect[9]), vect[10], vect[11],
+								vect[12], vect[13], vect[14], vect[15], vect[16]);
+
+						dto = insert(dto);
+						listDto.add(dto);
+					}
+				}
+			}
+			return listDto;
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityException(e.getMessage());
+		} catch (FileNotFoundException e) {
+			throw new ResourceIOException(e.getMessage());
+		} catch (IOException e) {
+			throw new ResourceIOException(e.getMessage());
+		} catch (CsvValidationException e) {
+			throw new ResourceIOException(e.getMessage());
+		} catch (CsvException e) {
+			throw new ResourceIOException(e.getMessage());
+		}
 	}
 }

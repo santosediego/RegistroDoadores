@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -45,7 +46,7 @@ public class Doador implements Serializable {
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant dataAlteracao;
 	
-	@OneToOne(mappedBy = "doador")
+	@OneToOne(mappedBy = "doador", cascade = CascadeType.PERSIST)
 	private Endereco endereco;
 
 	public Doador() {
