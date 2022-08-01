@@ -6,6 +6,7 @@
     align-items: center;
     margin-top: 15px;
     border-radius: 3px;
+    justify-content: space-between;
 }
 
 .input-search {
@@ -34,6 +35,15 @@
 
 .input-search input:focus {
     box-shadow: none;
+}
+
+.menu-container-controls {
+    display: flex;
+    justify-content: space-between;
+}
+
+.dropdown-item {
+    cursor: pointer;
 }
 
 .btn-outline,

@@ -4,7 +4,7 @@ import Table from "core/components/Table";
 import { DoadorResponse } from "core/types/Doador";
 import { makePrivateRequest } from "core/utils/request";
 import { useCallback, useEffect, useState } from "react";
-import { messageError, messageInfo } from "core/utils/toastMessages";
+import { messageError, messageInfo, messageSuccess } from "core/utils/toastMessages";
 
 function Listing() {
 
@@ -71,9 +71,26 @@ function Listing() {
         }
     }
 
+    const handleUpload = (selectedFile: File) => {
+
+        const payload = new FormData();
+        payload.append('file', selectedFile);
+
+        makePrivateRequest({
+            url: `/doadores/upload`,
+            method: 'POST',
+            data: payload
+        }).then(response => {
+            getDoadores();
+            messageSuccess('Upload realizado com sucesso!');
+        }).catch((AxiosError) => {
+            messageError(AxiosError.response.data.message);
+        });
+    }
+
     return (
         <>
-            <Search onSearch={search => getDoadores(search)} />
+            <Search onSearch={search => getDoadores(search)} handleUpload={handleUpload} />
             <Table doadores={page.content} onRemove={onRemove} />
             <Pagination page={page} onChange={handlePageChange} />
         </>

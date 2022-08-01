@@ -46,7 +46,7 @@ public class Doador implements Serializable {
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant dataAlteracao;
 	
-	@OneToOne(mappedBy = "doador", cascade = CascadeType.PERSIST)
+	@OneToOne(mappedBy = "doador", cascade = CascadeType.ALL)
 	private Endereco endereco;
 
 	public Doador() {

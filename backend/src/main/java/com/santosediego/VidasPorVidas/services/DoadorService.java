@@ -1,5 +1,6 @@
 package com.santosediego.VidasPorVidas.services;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -31,13 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
 import com.opencsv.CSVWriter;
-import com.opencsv.exceptions.CsvException;
-import com.opencsv.exceptions.CsvValidationException;
 import com.santosediego.VidasPorVidas.dto.DoadorDTO;
 import com.santosediego.VidasPorVidas.dto.DoadorExportDTO;
 import com.santosediego.VidasPorVidas.entities.Doador;
@@ -46,6 +41,7 @@ import com.santosediego.VidasPorVidas.entities.enums.EstadoCivil;
 import com.santosediego.VidasPorVidas.entities.enums.GrupoSanguineo;
 import com.santosediego.VidasPorVidas.repositories.DoadorRepository;
 import com.santosediego.VidasPorVidas.repositories.EnderecoRepository;
+import com.santosediego.VidasPorVidas.services.exceptions.ArrayException;
 import com.santosediego.VidasPorVidas.services.exceptions.DataIntegrityException;
 import com.santosediego.VidasPorVidas.services.exceptions.DatabaseException;
 import com.santosediego.VidasPorVidas.services.exceptions.ResourceIOException;
@@ -175,12 +171,12 @@ public class DoadorService {
 	public List<DoadorDTO> uploadFile(MultipartFile multipartFile) {
 
 		if (!multipartFile.isEmpty() && multipartFile.getContentType().equals("text/csv") || multipartFile.getName().equals("doadores")) {
-			
+
 			List<DoadorDTO> listDto = new ArrayList<DoadorDTO>();
 			Path filePath = saveFile(multipartFile);
 
 			if (filePath != null)
-				listDto = importData(filePath);
+				listDto = saveImportSaveData(filePath);
 
 			return listDto;
 		} else {
@@ -311,49 +307,41 @@ public class DoadorService {
 	}
 
 	@Transactional
-	private List<DoadorDTO> importData(Path filePath) {
+	private List<DoadorDTO> saveImportSaveData(Path filePath) {
+		
+		List<DoadorDTO> listDto = new ArrayList<DoadorDTO>();
 
-		try {
+		try (BufferedReader br = new BufferedReader(new FileReader(filePath.toString()))) {
 
-			List<DoadorDTO> listDto = new ArrayList<DoadorDTO>();
+			String line = br.readLine();
+			line = br.readLine();
 
-			// Create an object of filereader class with CSV file as a parameter.
-			FileReader filereader = new FileReader(filePath.toString());
+			while (line != null) {
 
-			// create csvParser object with custom separator semi-colon
-			CSVParser parser = new CSVParserBuilder().withSeparator(';').build();
+				String[] vect = line.split(";");
 
-			// create csvReader object passing file reader as a parameter
-			CSVReader csvReader = new CSVReaderBuilder(filereader).withCSVParser(parser).withSkipLines(1).build();
-
-			List<String[]> allData = csvReader.readAll();
-			for (String[] row : allData) {
-				for (String cell : row) {
-
-					String[] vect = cell.split(",");
-					Optional<Doador> obj = doadorRepository.findByCpf(vect[2]);
-
-					if (obj.isEmpty()) {
-						DoadorDTO dto = new DoadorDTO(null, vect[1], vect[2], vect[3], Instant.parse(vect[4]), vect[5],
-								vect[6], vect[7], vect[8], null, Double.parseDouble(vect[9]), vect[10], vect[11],
-								vect[12], vect[13], vect[14], vect[15], vect[16]);
-
-						dto = insert(dto);
-						listDto.add(dto);
-					}
+				Optional<Doador> obj = doadorRepository.findByCpf(vect[2]);
+				
+				if (obj.isEmpty()) {
+					DoadorDTO dto = new DoadorDTO(null, vect[1], vect[2], vect[3], Instant.parse(vect[4]), vect[5],
+							vect[6], vect[7], vect[8], null, Double.parseDouble(vect[9]), vect[10], vect[11],
+							vect[12], vect[13], vect[14], vect[15], vect[16]);
+					
+					dto = insert(dto);
+					listDto.add(dto);
 				}
+
+				line = br.readLine();
 			}
 			return listDto;
-		} catch (DataIntegrityViolationException e) {
+		}  catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException(e.getMessage());
 		} catch (FileNotFoundException e) {
 			throw new ResourceIOException(e.getMessage());
 		} catch (IOException e) {
 			throw new ResourceIOException(e.getMessage());
-		} catch (CsvValidationException e) {
-			throw new ResourceIOException(e.getMessage());
-		} catch (CsvException e) {
-			throw new ResourceIOException(e.getMessage());
+		} catch (ArrayIndexOutOfBoundsException e) {
+			throw new ArrayException("Verifique a estrutura do arquivo!");
 		}
 	}
 }

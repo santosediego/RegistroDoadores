@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.santosediego.VidasPorVidas.services.exceptions.ArrayException;
 import com.santosediego.VidasPorVidas.services.exceptions.DataIntegrityException;
 import com.santosediego.VidasPorVidas.services.exceptions.DatabaseException;
 import com.santosediego.VidasPorVidas.services.exceptions.ResourceIOException;
@@ -82,6 +83,18 @@ public class ResourceExceptionHandler implements Serializable {
 		err.setTimestamp(Instant.now());
 		err.setStatus(status.value());
 		err.setError("IOException");
+		err.setMessage(e.getMessage());
+		err.setPath(request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
+	}
+
+	@ExceptionHandler(ArrayException.class)
+	public ResponseEntity<StandardError> arrayException(ArrayException e, HttpServletRequest request) {
+		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+		StandardError err = new StandardError();
+		err.setTimestamp(Instant.now());
+		err.setStatus(status.value());
+		err.setError("Array index exception");
 		err.setMessage(e.getMessage());
 		err.setPath(request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
