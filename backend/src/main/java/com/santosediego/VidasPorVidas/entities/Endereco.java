@@ -3,6 +3,7 @@ package com.santosediego.VidasPorVidas.entities;
 import java.io.Serializable;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,12 +22,26 @@ public class Endereco implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(length = 120)
 	private String logradouro;
+
+	@Column(length = 15)
 	private String numero;
+
+	@Column(length = 120)
 	private String complemento;
+
+	@Column(length = 120)
 	private String bairro;
+
+	@Column(length = 9)
 	private String cep;
+
+	@Column(length = 120)
 	private String localidade;
+
+	@Column(length = 2)
 	private String estado;
 
 	@OneToOne

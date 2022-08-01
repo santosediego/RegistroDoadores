@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 
 import com.santosediego.VidasPorVidas.entities.Doador;
 
-public class DoadorDTO implements Serializable{
+public class DoadorDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -21,19 +21,37 @@ public class DoadorDTO implements Serializable{
 	@NotBlank(message = "Preenchimento obrigatório!")
 	@Size(min = 14, max = 14, message = "O CPF deve conter números e pontos")
 	private String cpf;
+
+	@Size(max = 12)
 	private String rg;
 	private Instant dataNascimento;
 	private String genero;
 	private String estadoCivil;
 	private String grupoSanguineo;
+
+	@Size(max = 16)
 	private String celular;
 	private Double peso;
+
+	@Size(max = 120)
 	private String logradouro;
+
+	@Size(max = 15)
 	private String numero;
+
+	@Size(max = 120)
 	private String complemento;
+
+	@Size(max = 120)
 	private String bairro;
+
+	@Size(max = 9)
 	private String cep;
+
+	@Size(max = 120)
 	private String localidade;
+
+	@Size(max = 2)
 	private String estado;
 	private Instant dataCadastro;
 	private Instant dataAlteracao;
@@ -42,9 +60,9 @@ public class DoadorDTO implements Serializable{
 	}
 
 	public DoadorDTO(Long id, String nome, String cpf, String rg, Instant dataNascimento, String genero,
-			String estadoCivil, String grupoSanguineo, String celular, Double peso,
-			String logradouro, String numero, String complemento, String bairro, String cep, String localidade,
-			String estado, Instant dataCadastro,Instant dataAlteracao) {
+			String estadoCivil, String grupoSanguineo, String celular, Double peso, String logradouro, String numero,
+			String complemento, String bairro, String cep, String localidade, String estado, Instant dataCadastro,
+			Instant dataAlteracao) {
 		this.id = id;
 		this.nome = nome;
 		this.cpf = cpf;

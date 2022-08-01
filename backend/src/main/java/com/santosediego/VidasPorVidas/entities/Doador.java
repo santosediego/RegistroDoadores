@@ -25,17 +25,29 @@ public class Doador implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(length = 120)
 	private String nome;
 
-	@Column(unique = true, nullable = false)
+	@Column(unique = true, nullable = false, length = 14)
 	private String cpf;
+
+	@Column(length = 12)
 	private String rg;
 
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant dataNascimento;
+
+	@Column(length = 3)
 	private String genero;
+
+	@Column(length = 3)
 	private String estadoCivil;
+
+	@Column(length = 3)
 	private String grupoSanguineo;
+
+	@Column(length = 16)
 	private String celular;
 	private Double peso;
 
@@ -44,7 +56,7 @@ public class Doador implements Serializable {
 
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant dataAlteracao;
-	
+
 	@OneToOne(mappedBy = "doador", cascade = CascadeType.ALL)
 	private Endereco endereco;
 
@@ -52,8 +64,8 @@ public class Doador implements Serializable {
 	}
 
 	public Doador(Long id, String nome, String cpf, String rg, Instant dataNascimento, String genero,
-			EstadoCivil estadoCivil, GrupoSanguineo grupoSanguineo, String celular, Double peso,
-			Instant dataCadastro, Instant dataAlteracao) {
+			EstadoCivil estadoCivil, GrupoSanguineo grupoSanguineo, String celular, Double peso, Instant dataCadastro,
+			Instant dataAlteracao) {
 		this.id = id;
 		this.nome = nome;
 		this.cpf = cpf;
@@ -67,7 +79,7 @@ public class Doador implements Serializable {
 		this.dataCadastro = dataCadastro;
 		this.dataAlteracao = dataAlteracao;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
