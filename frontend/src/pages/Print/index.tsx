@@ -24,7 +24,7 @@ function Print() {
 
     useEffect(() => {
         setIsLoadingDoadores(true);
-        makePrivateRequest({ url: '/doadores/export' })
+        makePrivateRequest({ url: '/doadores/list' })
             .then(response => setDoadores(response.data)
             )
             .finally(() => setIsLoadingDoadores(false));

@@ -25,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.santosediego.VidasPorVidas.dto.DoadorDTO;
-import com.santosediego.VidasPorVidas.dto.DoadorExportDTO;
 import com.santosediego.VidasPorVidas.services.DoadorService;
 
 @RestController
@@ -47,9 +46,9 @@ public class DoadorController {
 		return service.findById(id);
 	}
 
-	@GetMapping(value = "/export")
-	public ResponseEntity<List<DoadorExportDTO>> exportAll() {
-		List<DoadorExportDTO> listDTO = service.exportAll();
+	@GetMapping(value = "/list")
+	public ResponseEntity<List<DoadorDTO>> list() {
+		List<DoadorDTO> listDTO = service.listAll();
 		return ResponseEntity.ok().body(listDTO);
 	}
 

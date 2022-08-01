@@ -17,4 +17,11 @@
 
 .btn-salvar {
     margin-left: 25px;
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.btn-salvar:hover {
+    background-color: #F5F9FF;
+    color: var(--color-primary);
 }

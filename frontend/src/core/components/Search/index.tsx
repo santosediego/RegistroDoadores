@@ -72,7 +72,7 @@ function Search({ onSearch, handleUpload }: Props) {
                 <button className='btn btn-menu' onClick={handlePrint}>Gerar lista</button>
                 <div className="dropdown">
                     <button className="btn btn-menu dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        {/* <Gear /> */}Arquivos
+                        Arquivos
                     </button>
                     <ul className="dropdown-menu">
                         <li><div className="dropdown-item" onClick={handleDownload}>Exportar doadores</div></li>

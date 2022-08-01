@@ -37,7 +37,6 @@ public class Doador implements Serializable {
 	private String estadoCivil;
 	private String grupoSanguineo;
 	private String celular;
-	private String telefone;
 	private Double peso;
 
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
@@ -53,7 +52,7 @@ public class Doador implements Serializable {
 	}
 
 	public Doador(Long id, String nome, String cpf, String rg, Instant dataNascimento, String genero,
-			EstadoCivil estadoCivil, GrupoSanguineo grupoSanguineo, String celular, String telefone, Double peso,
+			EstadoCivil estadoCivil, GrupoSanguineo grupoSanguineo, String celular, Double peso,
 			Instant dataCadastro, Instant dataAlteracao) {
 		this.id = id;
 		this.nome = nome;
@@ -64,7 +63,6 @@ public class Doador implements Serializable {
 		this.estadoCivil = (estadoCivil == null) ? null : estadoCivil.getId();
 		this.grupoSanguineo = (grupoSanguineo == null) ? null : grupoSanguineo.getId();
 		this.celular = celular;
-		this.telefone = telefone;
 		this.peso = peso;
 		this.dataCadastro = dataCadastro;
 		this.dataAlteracao = dataAlteracao;
@@ -140,14 +138,6 @@ public class Doador implements Serializable {
 
 	public void setCelular(String celular) {
 		this.celular = celular;
-	}
-
-	public String getTelefone() {
-		return telefone;
-	}
-
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
 	}
 
 	public Double getPeso() {

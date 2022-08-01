@@ -27,7 +27,6 @@ public class DoadorDTO implements Serializable{
 	private String estadoCivil;
 	private String grupoSanguineo;
 	private String celular;
-	private String telefone;
 	private Double peso;
 	private String logradouro;
 	private String numero;
@@ -36,14 +35,16 @@ public class DoadorDTO implements Serializable{
 	private String cep;
 	private String localidade;
 	private String estado;
+	private Instant dataCadastro;
+	private Instant dataAlteracao;
 
 	public DoadorDTO() {
 	}
 
 	public DoadorDTO(Long id, String nome, String cpf, String rg, Instant dataNascimento, String genero,
-			String estadoCivil, String grupoSanguineo, String celular, String telefone, Double peso,
+			String estadoCivil, String grupoSanguineo, String celular, Double peso,
 			String logradouro, String numero, String complemento, String bairro, String cep, String localidade,
-			String estado) {
+			String estado, Instant dataCadastro,Instant dataAlteracao) {
 		this.id = id;
 		this.nome = nome;
 		this.cpf = cpf;
@@ -53,7 +54,6 @@ public class DoadorDTO implements Serializable{
 		this.estadoCivil = estadoCivil;
 		this.grupoSanguineo = grupoSanguineo;
 		this.celular = celular;
-		this.telefone = telefone;
 		this.peso = peso;
 		this.logradouro = logradouro;
 		this.numero = numero;
@@ -62,6 +62,8 @@ public class DoadorDTO implements Serializable{
 		this.cep = cep;
 		this.localidade = localidade;
 		this.estado = estado;
+		this.setDataCadastro(dataCadastro);
+		this.dataAlteracao = dataAlteracao;
 	}
 
 	public DoadorDTO(Doador doador) {
@@ -74,7 +76,6 @@ public class DoadorDTO implements Serializable{
 		estadoCivil = doador.getEstadoCivil().getId();
 		grupoSanguineo = doador.getGrupoSanquineo().getId();
 		celular = doador.getCelular();
-		telefone = doador.getTelefone();
 		peso = doador.getPeso();
 		logradouro = doador.getEndereco().getLogradouro();
 		numero = doador.getEndereco().getNumero();
@@ -83,6 +84,8 @@ public class DoadorDTO implements Serializable{
 		cep = doador.getEndereco().getCep();
 		localidade = doador.getEndereco().getLocalidade();
 		estado = doador.getEndereco().getEstado();
+		dataCadastro = doador.getDataCadastro();
+		dataAlteracao = doador.getDataAlteracao();
 	}
 
 	public Long getId() {
@@ -157,14 +160,6 @@ public class DoadorDTO implements Serializable{
 		this.celular = celular;
 	}
 
-	public String getTelefone() {
-		return telefone;
-	}
-
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
-	}
-
 	public Double getPeso() {
 		return peso;
 	}
@@ -227,5 +222,21 @@ public class DoadorDTO implements Serializable{
 
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+
+	public Instant getDataCadastro() {
+		return dataCadastro;
+	}
+
+	public void setDataCadastro(Instant dataCadastro) {
+		this.dataCadastro = dataCadastro;
+	}
+
+	public Instant getDataAlteracao() {
+		return dataAlteracao;
+	}
+
+	public void setDataAlteracao(Instant dataAlteracao) {
+		this.dataAlteracao = dataAlteracao;
 	}
 }

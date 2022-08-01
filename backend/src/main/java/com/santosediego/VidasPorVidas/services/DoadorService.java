@@ -34,7 +34,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.opencsv.CSVWriter;
 import com.santosediego.VidasPorVidas.dto.DoadorDTO;
-import com.santosediego.VidasPorVidas.dto.DoadorExportDTO;
 import com.santosediego.VidasPorVidas.entities.Doador;
 import com.santosediego.VidasPorVidas.entities.Endereco;
 import com.santosediego.VidasPorVidas.entities.enums.EstadoCivil;
@@ -80,9 +79,9 @@ public class DoadorService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<DoadorExportDTO> exportAll() {
+	public List<DoadorDTO> listAll() {
 		List<Doador> doador = doadorRepository.findAll();
-		List<DoadorExportDTO> listDTO = doador.stream().map(x -> new DoadorExportDTO(x)).collect(Collectors.toList());
+		List<DoadorDTO> listDTO = doador.stream().map(x -> new DoadorDTO(x)).collect(Collectors.toList());
 		return listDTO;
 	}
 
@@ -194,7 +193,6 @@ public class DoadorService {
 		doador.setEstadoCivil(EstadoCivil.toEnum(dto.getEstadoCivil()));
 		doador.setGrupoSanquineo(GrupoSanguineo.toEnum(dto.getGrupoSanguineo()));
 		doador.setCelular(dto.getCelular());
-		doador.setTelefone(dto.getTelefone());
 		doador.setPeso(dto.getPeso());
 
 		if (doador.getId() == null) {
@@ -324,8 +322,8 @@ public class DoadorService {
 				
 				if (obj.isEmpty()) {
 					DoadorDTO dto = new DoadorDTO(null, vect[1], vect[2], vect[3], Instant.parse(vect[4]), vect[5],
-							vect[6], vect[7], vect[8], null, Double.parseDouble(vect[9]), vect[10], vect[11],
-							vect[12], vect[13], vect[14], vect[15], vect[16]);
+							vect[6], vect[7], vect[8], Double.parseDouble(vect[9]), vect[10], vect[11],
+							vect[12], vect[13], vect[14], vect[15], vect[16], null, null);
 					
 					dto = insert(dto);
 					listDto.add(dto);
