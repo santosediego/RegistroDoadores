@@ -8,13 +8,15 @@ import BaseForm from "../../core/components/BaseForm";
 import dayjs from "dayjs";
 import { estados, estadosCivis, genero, gruposSanguineo } from "core/utils/selectOptions";
 import MaskedInput from "core/utils/MaskedInput";
+import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 type FormState = {
     id: number;
     nome: string;
     cpf: string;
     rg: string;
-    dataNascimento: string;
+    dataNascimento: Date;
     genero: string;
     estadoCivil: string;
     grupoSanguineo: string;
@@ -50,7 +52,7 @@ function Form() {
                     setValue('nome', response.data.nome);
                     setValue('cpf', response.data.cpf);
                     setValue('rg', response.data.rg);
-                    setValue('dataNascimento', (dayjs(response.data.dataNascimento).format('YYYY-MM-DD')));
+                    setValue('dataNascimento', dayjs(response.data.dataNascimento).toDate());
                     setValue('genero', response.data.genero);
                     setValue('estadoCivil', response.data.estadoCivil);
                     setValue('grupoSanguineo', response.data.grupoSanguineo);
@@ -69,8 +71,6 @@ function Form() {
 
     const onSubmit = (data: FormState) => {
 
-        data.dataNascimento = dayjs(data.dataNascimento).toISOString();
-
         makePrivateRequest({
             url: isEditing ? `/doadores/${doadorId}` : '/doadores',
             method: isEditing ? 'PUT' : 'POST',
@@ -80,8 +80,8 @@ function Form() {
                 messageSuccess('Doador salvo com sucesso!');
                 navigate(`/`);
             })
-            .catch(() => {
-                messageError('Erro ao salvar doador!')
+            .catch((Error) => {
+                messageError(Error.response.data.message);
             })
     }
 
@@ -121,7 +121,7 @@ function Form() {
                             {errors.nome.message}
                         </div>}
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-3">
                         <Controller
                             name="cpf"
                             control={control}
@@ -147,7 +147,7 @@ function Form() {
                             {errors.cpf.message}
                         </div>}
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-3">
                         <Controller
                             name="rg"
                             control={control}
@@ -166,17 +166,35 @@ function Form() {
                             }}
                         />
                     </div>
-                    <div className="col-md-2">
-                        <input
-                            {...register("dataNascimento")}
-                            type="date"
-                            className="form-control"
+                    <div className="col-md-3">
+                        <Controller
+                            control={control}
                             name="dataNascimento"
-                            placeholder="Data de Nascimento"
-                            disabled={isView}
+                            rules={{
+                                required: { value: true, message: "Data de nascimento é obrigatório" },
+                            }}
+                            render={({ field: { onChange, value, ref } }) => (
+                                <ReactDatePicker
+                                    onChange={onChange}
+                                    className="form-control"
+                                    name="dataNascimento"
+                                    placeholderText="Data de Nascimento"
+                                    disabled={isView}
+                                    selected={value}
+                                    dateFormat="dd/MM/yyyy"
+                                    maxDate={new Date()}
+                                    showYearDropdown
+                                    yearDropdownItemNumber={50}
+                                    scrollableYearDropdown
+                                    autoComplete="off"
+                                />
+                            )}
                         />
+                        {errors.dataNascimento && <div className="invalid-feedback d-block">
+                            {errors.dataNascimento.message}
+                        </div>}
                     </div>
-                    <div className="col-md-2">
+                    <div className="col-md-3">
                         <input
                             {...register("peso")}
                             type="number"
@@ -189,7 +207,7 @@ function Form() {
                             max={300}
                         />
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-3">
                         <select
                             {...register("genero")}
                             className="form-select"
@@ -202,7 +220,7 @@ function Form() {
 
                         </select>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-3">
                         <select
                             {...register("estadoCivil")}
                             className="form-select"
@@ -214,7 +232,7 @@ function Form() {
                             ))}
                         </select>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-3">
 
                         <select
                             {...register("grupoSanguineo")}
@@ -227,7 +245,7 @@ function Form() {
                             ))}
                         </select>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-3">
                         <Controller
                             name="celular"
                             control={control}

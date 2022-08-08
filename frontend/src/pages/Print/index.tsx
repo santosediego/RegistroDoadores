@@ -7,6 +7,9 @@ import { useForm } from "react-hook-form";
 import Select from 'react-select';
 import DoadoresPDF from 'core/report/doadoresReport';
 import { messageSuccess } from 'core/utils/toastMessages';
+import dayjs from 'dayjs';
+import ReactDatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 type FormState = {
     doadores: Doador[];
@@ -16,7 +19,7 @@ function Print() {
 
     const { handleSubmit } = useForm<FormState>();
 
-    const [selectedDate, setSelectedDate] = useState('')
+    const [selectedDate, setSelectedDate] = useState<Date>(new Date())
     const [doadores, setDoadores] = useState<Doador[]>([]);
     const [selectedDoadores, setSelectedDoadores] = useState<Doador[]>([]);
     const [listDoadores, setListDoadores] = useState<Doador[]>([]);
@@ -83,12 +86,16 @@ function Print() {
             <BaseForm title="Lista de doadores">
                 <div className="row g-3 mb-5">
                     <div className="col-md-2">
-                        <input
-                            name='date'
-                            type="date"
-                            className='form-control'
-                            onChange={date => setSelectedDate(date.target.value)}
-                            required
+                        <ReactDatePicker
+                            onChange={date => setSelectedDate(dayjs(date).toDate())}
+                            className="form-control"
+                            placeholderText="Data do relatório"
+                            selected={selectedDate}
+                            dateFormat="dd/MM/yyyy"
+                            showYearDropdown
+                            yearDropdownItemNumber={5}
+                            scrollableYearDropdown
+                            autoComplete="off"
                         />
                     </div>
                     <div className="col-md-8">
@@ -132,7 +139,7 @@ function Print() {
                         <tbody>
                             {listDoadores?.map((doador, i) => (
 
-                                <tr>
+                                <tr key={i}>
                                     <td>{i + 1}</td>
                                     <td>{doador.nome}</td>
                                     <td>
