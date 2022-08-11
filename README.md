@@ -31,6 +31,7 @@ por arquivo CSV e a impressão de um relatório PDF com os doadores posteriormen
 - PdfMake
 - DatePicker
 - Dayjs
+- API [Via Cep](https://viacep.com.br) para consulta do CEP
 
 ## Implantação em produção
 - Back end: Heroku
