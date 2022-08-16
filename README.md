@@ -61,7 +61,7 @@ Pré-requisitos:
 
 ```bash
 # clonar repositório
-git clone https://github.com/santosediego/dsmeta.git
+git clone https://github.com/santosediego/RegistroDoadores.git
 
 # entrar na pasta do projeto front end web
 cd RegistroDoadores/frontend/
