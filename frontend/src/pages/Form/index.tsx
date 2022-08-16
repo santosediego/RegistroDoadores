@@ -1,6 +1,6 @@
 import { cepRequest, makePrivateRequest } from "core/utils/request";
 import { messageError, messageSuccess, messageWarning } from "core/utils/toastMessages";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -42,6 +42,7 @@ function Form() {
     const { doadorId, state } = useParams<ParamsType>();
     const { register, setValue, handleSubmit, control, formState: { errors } } = useForm<FormState>();
     const isView = state === 'view';
+    const [isDisabled, setIsDisabled] = useState(false);
     const isEditing = doadorId !== "create"; // o isEditing é diferente de create?
     const formTitle = isView ? 'Visualiar doador' : isEditing ? 'Editar doador' : 'Cadastrar doador';
 
@@ -71,6 +72,8 @@ function Form() {
 
     const onSubmit = (data: FormState) => {
 
+        setIsDisabled(true);
+
         makePrivateRequest({
             url: isEditing ? `/doadores/${doadorId}` : '/doadores',
             method: isEditing ? 'PUT' : 'POST',
@@ -81,6 +84,7 @@ function Form() {
                 navigate(`/`);
             })
             .catch((Error) => {
+                setIsDisabled(false);
                 messageError(Error.response.data.message);
             })
     }
@@ -102,7 +106,7 @@ function Form() {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="container">
-            <BaseForm title={formTitle} isView={isView}>
+            <BaseForm title={formTitle} isView={isView} isDisabled={isDisabled}>
                 <div className="row g-3">
                     <div className="col-12">
                         <input

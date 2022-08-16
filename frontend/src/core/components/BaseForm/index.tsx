@@ -6,9 +6,10 @@ type Props = {
     title: string;
     children: React.ReactNode;
     isView?: boolean;
+    isDisabled?: boolean;
 }
 
-const BaseForm = ({ title, children, isView }: Props) => {
+const BaseForm = ({ title, children, isView, isDisabled }: Props) => {
 
     return (
         <div className="vida-base-form card-base">
@@ -21,7 +22,7 @@ const BaseForm = ({ title, children, isView }: Props) => {
                     CANCELAR
                 </Link>
                 {!isView ? (
-                    <button className="btn btn-primary btn-salvar">
+                    <button className="btn btn-primary btn-salvar" disabled={isDisabled}>
                         SALVAR
                     </button>
                 ) : null}
