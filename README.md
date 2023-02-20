@@ -1,7 +1,7 @@
 # Registro de Doadores
 
 [![NPM](https://img.shields.io/npm/l/react)](https://github.com/santosediego/RegistroDoadores/blob/main/LICENSE) 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/c064f2ad-b36c-4052-8121-d14475501253/deploy-status)](https://app.netlify.com/sites/vidaporvidas/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/9f87d883-07f7-4086-bc85-c1a54500918f/deploy-status)](https://app.netlify.com/sites/registrodoadores/deploys)
 
 ## Sobre o projeto
 
