@@ -1,9 +1,8 @@
 package com.santosediego.VidasPorVidas.dto;
 
-import com.santosediego.VidasPorVidas.entities.Doador;
 import com.santosediego.VidasPorVidas.entities.Endereco;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -11,24 +10,30 @@ public class EnderecoDTO implements Serializable {
 
     private Long id;
 
+    @NotBlank(message = "Preenchimento obrigatório!")
     @Size(max = 120)
     private String logradouro;
 
+    @NotBlank(message = "Preenchimento obrigatório!")
     @Size(max = 15)
     private String numero;
 
     @Size(max = 120)
     private String complemento;
 
+    @NotBlank(message = "Preenchimento obrigatório!")
     @Size(max = 120)
     private String bairro;
 
+    @NotBlank(message = "Preenchimento obrigatório!")
     @Size(max = 9)
     private String cep;
 
+    @NotBlank(message = "Preenchimento obrigatório!")
     @Size(max = 120)
     private String localidade;
 
+    @NotBlank(message = "Preenchimento obrigatório!")
     @Size(max = 2)
     private String estado;
 

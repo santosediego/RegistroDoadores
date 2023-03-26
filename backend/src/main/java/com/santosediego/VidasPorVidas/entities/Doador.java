@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import com.santosediego.VidasPorVidas.entities.enums.EstadoCivil;
@@ -182,6 +184,16 @@ public class Doador implements Serializable {
 
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
+	}
+
+	@PrePersist
+	public void prePersist() {
+		dataCadastro = Instant.now();
+	}
+
+	@PreUpdate
+	public void preUpdate() {
+		dataAlteracao = Instant.now();
 	}
 
 	@Override

@@ -1,15 +1,15 @@
 package com.santosediego.VidasPorVidas.dto;
 
-import java.io.Serializable;
-import java.time.Instant;
+import com.santosediego.VidasPorVidas.entities.Doador;
+import org.hibernate.validator.constraints.Range;
+import org.hibernate.validator.constraints.br.CPF;
 
-import javax.validation.constraints.DecimalMin;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import com.santosediego.VidasPorVidas.entities.Doador;
-import org.hibernate.validator.constraints.br.CPF;
+import java.io.Serializable;
+import java.time.Instant;
 
 public class DoadorDTO implements Serializable {
 
@@ -44,11 +44,13 @@ public class DoadorDTO implements Serializable {
     @Size(max = 16)
     private String celular;
 
-    @DecimalMin(value = "49", message = "O peso mínimo é de 50Kg.")
+    @Range(min = 50, message = "O peso mínimo é de 50Kg.")
     private Double peso;
     private Instant dataCadastro;
     private Instant dataAlteracao;
 
+    @NotNull(message = "Enedereço é de preenchimento obrigatório.")
+    @Valid
     private EnderecoDTO endereco;
 
     public DoadorDTO() {
@@ -117,13 +119,13 @@ public class DoadorDTO implements Serializable {
         return rg;
     }
 
-	public void setRg(String rg) {
-		this.rg = rg;
-	}
+    public void setRg(String rg) {
+        this.rg = rg;
+    }
 
-	public Instant getDataNascimento() {
-		return dataNascimento;
-	}
+    public Instant getDataNascimento() {
+        return dataNascimento;
+    }
 
     public void setDataNascimento(Instant dataNascimento) {
         this.dataNascimento = dataNascimento;
