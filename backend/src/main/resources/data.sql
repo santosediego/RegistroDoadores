@@ -15,7 +15,8 @@ values ('José Maria', '362.389.160-60', '45.359.598', TIMESTAMP WITH TIME ZONE 
 ('Iago Moura', '761.316.766-66', '35.180.301-4', TIMESTAMP WITH TIME ZONE '1950-04-06T03:00:00.00000Z', 'AB+', 67, 'M', 'CAS', '(34)98892-1080', NOW()),
 ('Heloise Silvana Drumond', '121.218.786-53', '41.752.868-1', TIMESTAMP WITH TIME ZONE '1980-11-20T03:00:00.00000Z', 'O+', 68, 'F', 'CAS', '(34)98777-7922', NOW()),
 ('Malu Vanessa Silveira', '312.295.106-13', '38.192.624-2', TIMESTAMP WITH TIME ZONE '2000-05-15T03:00:00.00000Z', 'B-', 50, 'F', 'SOL', '(34)98137-8516', NOW()),
-('Vanessa Eloá Souza', '973.342.236-32', '11.554.543-8', TIMESTAMP WITH TIME ZONE '1997-06-30T03:00:00.00000Z', 'A-', 52, 'F', 'CAS', '(34)98548-3482', NOW());
+('Vanessa Eloá Souza', '973.342.236-32', '11.554.543-8', TIMESTAMP WITH TIME ZONE '1997-06-30T03:00:00.00000Z', 'A-', 52, 'F', 'CAS', '(34)98548-3482', NOW()),
+('Bárbara Heloise da Cruz', '079.715.436-11', '43.682.805-4', TIMESTAMP WITH TIME ZONE '1988-03-19T03:00:00.00000Z', 'A-', 83, 'F', 'CAS', '(34)99889-4786', NOW());
 
 INSERT INTO tb_endereco (logradouro, numero, complemento, bairro, cep, localidade, estado, doador_id)
 VALUES ('Rua Rio Grande do Norte', '733', 'n/d', 'Nossa Senhora das Graças', '38402-016', 'Uberlândia', 'MG', 1),
@@ -32,4 +33,5 @@ VALUES ('Rua Rio Grande do Norte', '733', 'n/d', 'Nossa Senhora das Graças', '3
 ('Rua João Pinheiro', '755', 'Em frente a pizzaria', 'Centro', '38550-970', 'Coromandel', 'MG', 12),
 ('Rua João Pinheiro', '838', NULL, 'Centro', '38550-970', 'Coromandel', 'MG', 13),
 ('Rua Pedro C. Carvalho', '431', NULL, 'Centro', '38550-977', 'Coromandel', 'MG', 14),
-('Rua Dois', '659', NULL, 'Centro', '38550-976', 'Coromandel', 'MG', 15);
+('Rua Dois', '659', NULL, 'Centro', '38550-976', 'Coromandel', 'MG', 15),
+('Rua Principal', '15', NULL, 'Centro', '38500-974', 'Monte Carmelo', 'MG', 16);
